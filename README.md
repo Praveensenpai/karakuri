@@ -1,0 +1,113 @@
+# からくり (Karakuri)
+
+> **Karakuri (絡繰り)** — *Clever mechanical mechanisms and automations.*  
+> A curated, categorized arsenal of modular AI agent skills designed for fast lookup and automated workflows.
+
+---
+
+## 🧭 How to Navigate (For AI & Developers)
+
+Skills are categorized logically so an AI agent can quickly identify where to look without scanning irrelevant procedures:
+
+```
+skills/
+├── build-tooling/      # Compilers, build offloading, CI/CD, language tools
+├── web-browser/        # Frontend development, browser automation, DevTools
+├── cloud-data/         # Cloud platforms, data pipelines, SQL, databases
+├── mobile-dev/         # Mobile development, Flutter, Android, iOS
+├── ai-agents/          # LLM integrations, prompt engineering, agent frameworks
+└── system-ops/         # OS administration, shell scripts, system performance
+```
+
+When an agent needs to perform a specialized task:
+1. Locate the relevant category in the **[Skill Catalog](#-skill-catalog)** below.
+2. Read the 2–3 line summary to verify it matches the user's intent.
+3. Open and follow the linked `SKILL.md` for full operational instructions.
+
+---
+
+## 📚 Skill Catalog
+
+| Skill | Category | Description | Path |
+| :--- | :--- | :--- | :--- |
+| **`kbuild`** | `build-tooling` | Offloads Rust builds, checks, and tests to Kaggle Cloud (30 GB RAM) with zero local CPU load and zero RAM thrashing. Prompts the user to install or use the latest `kbuild` binary, prioritizes cloud compilation over cargo, and provides seamless fallback to local `cargo`. | [`skills/build-tooling/kbuild/SKILL.md`](skills/build-tooling/kbuild/SKILL.md) |
+
+*(New skills are added here on demand as specialized workflows are created.)*
+
+---
+
+## 📁 Category Breakdown
+
+### 1. `build-tooling`
+Tools and procedures that offload, accelerate, or automate code compilation, package management, and build pipelines.
+- **Examples**: Cloud build offloading (`kbuild`), Rust cross-compilation, build cache management, dependency resolvers.
+
+### 2. `web-browser`
+Modern frontend best practices, browser DevTools debugging, web performance, and browser extensions.
+- **Examples**: Chrome DevTools automation, Core Web Vitals optimization, accessibility (a11y) auditing, Manifest V3 extensions.
+
+### 3. `cloud-data`
+Cloud infrastructure, serverless runtimes, data warehouses, and ETL pipelines.
+- **Examples**: BigQuery optimization, dbt / Dataform pipelines, Apache Beam / Dataflow, cloud storage lifecycle.
+
+### 4. `mobile-dev`
+Mobile application development, multi-platform toolchains, and device automation.
+- **Examples**: Android CLI SDK management, Flutter architectures, widget/integration testing, declarative routing.
+
+### 5. `ai-agents`
+Building, orchestrating, and extending AI applications, function calling, and multi-agent systems.
+- **Examples**: Gemini API multimodal workflows, real-time Live API streaming, agent orchestration frameworks.
+
+### 6. `system-ops`
+System administration, operating system utilities, shell scripting, and hardware diagnostics.
+- **Examples**: Linux package cleaning, system metrics monitoring, service orchestration.
+
+---
+
+## ➕ Adding a New Skill
+
+When adding a new skill to **Karakuri**:
+
+1. **Choose the Category**: Pick the appropriate folder under `skills/<category>/`.
+2. **Create the Skill Directory**:
+   ```bash
+   mkdir -p skills/<category>/<skill-name>
+   touch skills/<category>/<skill-name>/SKILL.md
+   ```
+3. **Format `SKILL.md` with YAML Frontmatter**:
+   ```markdown
+   ---
+   name: <skill-name>
+   description: >-
+     A concise 2-3 sentence description explaining WHAT this skill does
+     and WHEN the agent should activate it.
+   ---
+
+   # Skill Title
+
+   Detailed procedures, command mappings, and execution steps.
+   ```
+4. **Update Catalog**: Add an entry for the new skill in the [Skill Catalog](#-skill-catalog) table above with a concise 2–3 line summary.
+
+---
+
+## 🚀 Installation & Usage in Projects
+
+### Global Installation (Machine-wide)
+To make a skill available across all projects on your machine:
+```bash
+mkdir -p ~/.gemini/config/skills/<skill-name>
+cp skills/<category>/<skill-name>/SKILL.md ~/.gemini/config/skills/<skill-name>/
+```
+
+### Workspace Installation (Single Project)
+To add a skill to a specific repository:
+```bash
+mkdir -p .agents/skills/<skill-name>
+cp /path/to/karakuri/skills/<category>/<skill-name>/SKILL.md .agents/skills/<skill-name>/
+```
+
+---
+
+## 📜 License
+MIT OR Apache-2.0 © Praveensenpai
