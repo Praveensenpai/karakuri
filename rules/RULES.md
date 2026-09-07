@@ -25,3 +25,7 @@ All implementations must strictly adhere to the corresponding domain skills in K
 - **Releases & Versioning** (`skills/build-tooling/git-release-craft/`):
   - **Release Notes**: Aesthetic highlight format with icons and direct install commands.
   - **Workflow Verification**: Actively track GitHub Actions CI/Release runs until green before declaring release complete.
+
+- **Bash & Shell Scripts** (`skills/system-ops/bash-clean-code/`):
+  - **Preamble**: Mandatory `set -euo pipefail` and `IFS=$'\n\t'`.
+  - **Zero Tolerance**: Zero ShellCheck warnings (`shellcheck -x`), mandatory trap cleanups for tempfiles, XDG compliance, strict variable quoting.
