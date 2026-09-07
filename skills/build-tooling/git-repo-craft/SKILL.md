@@ -38,7 +38,7 @@ A repository's GitHub metadata is its front door. Poor metadata kills discoverab
 ### Good vs. Bad Examples:
 | Status | Description | Rationale |
 | :--- | :--- | :--- |
-| ❌ Bad | `karakuri - Curated arsenal of specialized AI agent skills with categorized workflows and master catalog` | Redundant name, bloated, wordy |
+| ❌ Bad | `my-repo - A repository that contains various miscellaneous scripts and tools` | Redundant name, filler phrasing, vague |
 | ❌ Bad | `A collection of python scripts for my daily tasks and work` | Generic, zero meaning, filler phrasing |
 | ✅ Good | `Modular skills and automated workflows for AI coding agents` | Minimal, precise domain, immediate value |
 | ✅ Good | `Fast Rust compiler offloader to Kaggle Cloud with zero local CPU load` | Clear value proposition, concise |
