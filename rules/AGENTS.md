@@ -26,6 +26,10 @@ All implementations must strictly adhere to the corresponding domain skills in K
   - **Release Notes**: Aesthetic highlight format with icons and direct install commands.
   - **Workflow Verification**: Actively track GitHub Actions CI/Release runs until green before declaring release complete.
 
+- **Repository Management** (`skills/build-tooling/git-repo-craft/`):
+  - **Descriptions**: Minimal yet meaningful (<90 chars), zero filler words, no redundant repo name prefix.
+  - **Topics & Verification**: Mandatory 4–8 curated kebab-case topics across domain, language, purpose, and ecosystem, verified via `gh repo view`.
+
 - **Bash & Shell Scripts** (`skills/system-ops/bash-clean-code/`):
   - **Preamble**: Mandatory `set -euo pipefail` and `IFS=$'\n\t'`.
   - **Zero Tolerance**: Zero ShellCheck warnings (`shellcheck -x`), mandatory trap cleanups for tempfiles, XDG compliance, strict variable quoting.
