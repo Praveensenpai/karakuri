@@ -99,14 +99,22 @@ When adding a new skill to **Karakuri**:
 
 ## 🚀 Installation & Usage in Projects
 
-### Global Installation (Machine-wide)
-To make a skill available across all projects on your machine:
+### 🪄 One-Liner Magic (Recommended)
+
+Install all skills and global agent guardrails machine-wide with a single command:
+
 ```bash
-mkdir -p ~/.gemini/config/skills/<skill-name>
-cp skills/<category>/<skill-name>/SKILL.md ~/.gemini/config/skills/<skill-name>/
+curl -fsSL https://raw.githubusercontent.com/Praveensenpai/karakuri/main/install.sh | bash
 ```
 
-### Workspace Installation (Single Project)
+Or from a local clone:
+```bash
+./install.sh
+```
+
+<br>
+
+### 📁 Workspace Installation (Single Project)
 To add a skill to a specific repository:
 ```bash
 mkdir -p .agents/skills/<skill-name>
