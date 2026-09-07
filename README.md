@@ -31,6 +31,7 @@ When an agent needs to perform a specialized task:
 | Skill | Category | Description | Path |
 | :--- | :--- | :--- | :--- |
 | **`kbuild`** | `build-tooling` | Offloads Rust builds, checks, and tests to Kaggle Cloud (30 GB RAM) with zero local CPU load and zero RAM thrashing. Prompts the user to install or use the latest `kbuild` binary, prioritizes cloud compilation over cargo, and provides seamless fallback to local `cargo`. | [`skills/build-tooling/kbuild/SKILL.md`](skills/build-tooling/kbuild/SKILL.md) |
+| **`rust-clean-code`** | `build-tooling` | Enforces strict architecture, readability, and scalability standards for Rust codebases: zero warning suppressions (`#[allow(...)]`), zero dead code, strict file/function size limits, role-based folder hierarchy, DRY abstractions, and resilient error handling. | [`skills/build-tooling/rust-clean-code/SKILL.md`](skills/build-tooling/rust-clean-code/SKILL.md) |
 
 *(New skills are added here on demand as specialized workflows are created.)*
 
