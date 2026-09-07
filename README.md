@@ -1,7 +1,41 @@
-# からくり (Karakuri)
+# 🌸 からくり (Karakuri)
 
 > **Karakuri (絡繰り)** — *Clever mechanical mechanisms and automations.*  
 > A curated, categorized arsenal of modular AI agent skills designed for fast lookup and automated workflows.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-89b4fa?style=flat-square)](LICENSE)
+[![Skills Count](https://img.shields.io/badge/Skills-7%20Modular-cba6f7?style=flat-square)](skills/)
+[![Platform](https://img.shields.io/badge/Platform-Antigravity%20%7C%20Gemini-a6e3a1?style=flat-square)](https://github.com/Praveensenpai/karakuri)
+[![Quality](https://img.shields.io/badge/Quality-Production%20Standards-fab387?style=flat-square)](rules/RULES.md)
+
+> [!TIP]
+> **Progressive Disclosure · Zero Context Bloat · 100% Deterministic**  
+> Skills are indexed by name and summary. Full operational procedures and domain guardrails are loaded on-demand only when explicitly triggered.
+
+---
+
+## 🏗️ Architecture & Resolution Flow
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│   🤖 AI Coding Agent (Antigravity / Gemini CLI)          │
+│   · Receives user goal & analyzes requirements           │
+└────────────────────────────┬─────────────────────────────┘
+                             │  1. Match task against Skill Catalog
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│   🌸 からくり (Karakuri) Arsenal                         │
+│   · Progressive disclosure (names & descriptions)        │
+│   · Loads matching SKILL.md on-demand (< 0.05s)          │
+└────────────────────────────┬─────────────────────────────┘
+                             │  2. Inject clean domain rules & guardrails
+                             ▼
+┌──────────────────────────────────────────────────────────┐
+│   ✨ Production-Grade Execution                          │
+│   · Zero compiler / linter warnings                      │
+│   · Clean architecture & automated verification          │
+└──────────────────────────────────────────────────────────┘
+```
 
 ---
 
