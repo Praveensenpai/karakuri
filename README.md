@@ -112,5 +112,19 @@ cp /path/to/karakuri/skills/<category>/<skill-name>/SKILL.md .agents/skills/<ski
 
 ---
 
+## 🛡️ Project Rules & Behavioral Guardrails (`rules/`)
+
+Karakuri provides a standard behavioral contract in [`rules/RULES.md`](rules/RULES.md) (and [`rules/AGENTS.md`](rules/AGENTS.md)):
+
+- **Explicit Approval Protocol**: Mandatory requirement that AI agents explain **WHY** and **WHAT EFFECT** a change has, and obtain explicit user consent before editing code.
+- **Unified Standards Enforcement**: Directly references and enforces domain skills (`rust-clean-code`, `python-clean-code`, `git-release-craft`) without redundant rule sprawl.
+
+To enforce this in any repository, copy `rules/RULES.md` or `rules/AGENTS.md` to the root of your project:
+```bash
+cp /path/to/karakuri/rules/AGENTS.md ./AGENTS.md
+```
+
+---
+
 ## 📜 License
 MIT OR Apache-2.0 © Praveensenpai

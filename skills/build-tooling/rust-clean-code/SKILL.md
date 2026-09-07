@@ -2,8 +2,9 @@
 name: rust-clean-code
 description: >-
   Enforces strict architecture, readability, and scalability standards for Rust codebases.
-  Mandates zero warning suppressions (no #[allow(...)]), zero dead code, strict line and
-  function size limits, role-based folder hierarchy, DRY principles, and resilient error handling.
+  Mandates explicit approval before editing code, zero warning suppressions (no #[allow(...)]),
+  no old mod.rs (use foldername.rs), <400 lines/file, <60 lines/fn, max 3 nesting depth,
+  role-based architecture (domain/, infra/, api/), DRY, and zero production unwrap()/expect().
 ---
 
 # `rust-clean-code` Skill: Architecture, Scalability & Quality Rules
@@ -12,100 +13,99 @@ Enforces strict production standards for Rust projects. Code must be idiomatic, 
 
 ---
 
-## 1. Zero Warnings & Zero Dead Code Policy (Non-Negotiable)
+## 1. Explicit Approval Protocol (Before Editing Code)
+
+**Never** edit any code files or apply modifications without first explaining:
+1. **WHY** you are making the proposed modification.
+2. **WHAT EFFECT or FIX** it will produce.
+3. Receiving **explicit user approval** before modifying any code.
+
+---
+
+## 2. Zero Tolerance Rules (Non-Negotiable)
 
 1. **No Warning Suppressions**:
-   - **Never** add `#[allow(dead_code)]`, `#[allow(unused)]`, or `#[allow(clippy::...)]` to bypass compiler feedback.
-   - If code triggers a warning, fix the root cause immediately instead of silencing it.
-2. **Remove Dead Code Aggressively**:
-   - Delete unused functions, imports, variables, and struct fields.
-   - Do not leave commented-out code blocks or orphan helper functions.
-3. **Mandatory Verification**:
-   - Every change must pass without warnings:
+   - **Never** add `#[allow(dead_code)]`, `#[allow(unused)]`, or `#[allow(clippy::...)]`.
+   - If code triggers a warning, fix the underlying cause immediately.
+2. **No Old `mod.rs` (Modern Module Style)**:
+   - **Never use `mod.rs`**. Use Rust 2018+ edition file naming: `foldername.rs` placed alongside the `foldername/` directory.
+   - Example: `src/domain.rs` alongside `src/domain/user.rs`, NOT `src/domain/mod.rs`.
+3. **No Production Panics**:
+   - **Never** use `.unwrap()` or `.expect()` in production or library code.
+   - Propagate typed errors using `Result<T, E>` and the `?` operator.
+   - Reserve `.expect()` strictly for unit test assertions with clear context messages.
+4. **Zero Compiler Warnings**:
+   - All code must compile cleanly:
      ```bash
      cargo clippy --all-targets -- -D warnings
      cargo fmt --check
      ```
+5. **Zero Dead Code**:
+   - Unused imports, unused variables, dead functions, and abandoned struct fields must be deleted immediately.
 
 ---
 
-## 2. Quantitative Size Limits & Modularity
+## 3. Quantitative Size Limits & Complexity Thresholds
 
-Keep files and functions small, focused, and single-purpose:
+Keep files, functions, and control flow strictly constrained:
 
-| Metric | Target | Hard Limit | Action if Exceeded |
+| Metric | Soft Limit | Hard Limit | Action if Exceeded |
 | :--- | :--- | :--- | :--- |
-| **File Length** | 150–250 lines | **350 lines** | Split into submodules by domain/role |
-| **Function Length** | 15–30 lines | **50 lines** | Extract helper functions or pipeline stages |
-| **Functions per File** | 4–6 functions | **8 functions** | Decompose into separate responsibility files |
-| **Files per Folder** | 3–5 files | **7 files** | Create a subfolder with cohesive domain grouping |
-| **Parameters per Function** | 1–3 parameters | **4 parameters** | Group related inputs into a dedicated config/options struct |
+| **File Length** | 300 lines | **400 lines** | Split into submodules by domain/role |
+| **Function Length** | 40 lines | **60 lines** | Extract helper functions or sub-routines |
+| **Function Parameters** | 1–3 parameters | **4 parameters** | Group inputs into a dedicated struct / options object |
+| **Nesting Depth** | 2 levels | **3 levels** | Guard clauses, early returns, helper decomposition |
+| **Files per Folder** | 3–5 files | **7 files** | Subdivide into cohesive domain subfolders |
 
 ---
 
-## 3. Role-Based Folder Hierarchy
+## 4. Role-Based Folder Architecture
 
-Organize `src/` by architectural role rather than dumping all logic into flat files:
+Organize `src/` by architectural role rather than flat file dumps:
 
 ```
 src/
-├── main.rs / lib.rs         # Entrypoint & module tree declarations only
-├── error.rs                 # Centralized error types & conversions
-├── cli/                     # CLI parsing, flag definitions & argument validation
-│   ├── mod.rs
-│   └── args.rs
-├── domain/                  # Pure data structures, enums & domain models
-│   ├── mod.rs
-│   └── models.rs
-├── services/                # Core business logic, pipelines & algorithms
-│   ├── mod.rs
-│   └── runner.rs
-├── client/ (or api/)        # External network/HTTP calls, REST clients
-│   ├── mod.rs
-│   └── kaggle.rs
-├── storage/ (or cache/)     # Local state persistence, disk cache, serialization
-│   ├── mod.rs
-│   └── ledger.rs
-└── ui/                      # Terminal rendering, spinners, progress bars, formatting
-    ├── mod.rs
-    └── display.rs
+├── main.rs / lib.rs         # Root declarations & entrypoint only
+├── error.rs                 # Centralized error enum & conversions
+├── domain.rs                # Declares domain submodule
+├── domain/                  # Core business entities, models, traits, pure types
+│   ├── models.rs
+│   └── types.rs
+├── infra.rs                 # Declares infra submodule
+├── infra/                   # Storage, disk persistence, caching, OS interaction
+│   ├── storage.rs
+│   └── cache.rs
+├── api.rs                   # Declares api submodule
+├── api/                     # External HTTP/network clients, REST endpoints
+│   ├── client.rs
+│   └── payload.rs
+├── cli.rs                   # Declares cli submodule
+└── cli/                     # CLI arguments, Clap definitions & input validation
+    └── args.rs
 ```
 
-### Module Boundary Rules:
-- **`domain`** must remain pure and free of I/O or network dependencies.
-- **`client`** handles raw HTTP requests and returns domain models or typed errors.
-- **`ui`** only handles output formatting; business logic must never reside in UI formatters.
-- **`storage`** abstracts file persistence behind clear read/write APIs.
+### Module Boundary Invariants:
+- **`domain/`**: Must remain pure; zero network or filesystem dependencies.
+- **`infra/`**: Encapsulates disk I/O, cache persistence, and hardware interaction.
+- **`api/`**: Handles remote communication, returning domain models or typed errors.
+- **`cli/`**: Parses input flags and delegates immediately to domain/services.
 
 ---
 
-## 4. DRY (Don't Repeat Yourself) & Scalability
+## 5. Readability & DRY (Don't Repeat Yourself)
 
 1. **Centralize Shared Logic**:
-   - Repeated string formatting, duration calculations, or byte-size conversions must live in a dedicated utility module (e.g., `ui::format` or `util.rs`).
-   - URLs, default timeouts, and buffer sizes must be declared as `const` values at module heads, never hardcoded inline.
+   - Reusable string formatting, time parsing, and byte conversions must reside in a dedicated helper module.
+   - Constants (URLs, timeouts, default limits) must be declared as module-level `const`s, never hardcoded inline.
 2. **Trait-Driven Abstractions**:
-   - Use traits to define shared behavior across different storage or client implementations.
-   - Avoid duplicate `match` arms across multiple files; encapsulate the dispatch logic in a method on the enum itself.
-3. **Prefer Functional Combinators**:
-   - Use `map`, `and_then`, `filter_map`, `find`, and iterator pipelines instead of verbose mutable loop accumulators when clarity is preserved.
+   - Abstract I/O and external services behind traits for testability and flexibility.
+   - Avoid duplicate `match` arms across multiple files; encapsulate dispatch logic on the enum itself.
+3. **Guard Clauses & Early Returns**:
+   - Flatten nested `if / else` blocks using early `return Err(...)` or `continue` to stay within the max 3 nesting depth limit.
 
 ---
 
-## 5. Robust Error Handling (No Panics)
-
-1. **No Production Panics**:
-   - Never use `.unwrap()` or `.expect()` in library, service, or API code.
-   - Reserve `.expect()` strictly for unit test assertions or guaranteed invariants (with a detailed rationale in the message).
-2. **Propagate Errors via `?`**:
-   - Return `Result<T, AppError>` and propagate errors using the `?` operator.
-   - Provide contextual information when errors occur (e.g. using `thiserror` or descriptive error variants).
-
----
-
-## 6. Pre-Commit Checklist
-
-Before completing any task or committing changes:
+## 6. Pre-Commit Verification Checklist
 
 ```bash
 # 1. Format code to standard style
