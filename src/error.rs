@@ -10,11 +10,14 @@ pub enum KarakuriError {
         source: std::io::Error,
     },
 
-    #[error("Interactive prompt error: {0}")]
-    Prompt(#[from] inquire::InquireError),
+    #[error("Terminal I/O error: {0}")]
+    Terminal(#[from] std::io::Error),
 
     #[error("Home directory could not be resolved")]
     HomeNotFound,
+
+    #[error("Operation cancelled by user")]
+    Cancelled,
 }
 
 pub type Result<T> = std::result::Result<T, KarakuriError>;
