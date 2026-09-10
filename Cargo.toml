@@ -1,0 +1,23 @@
+[package]
+name = "karakuri"
+version = "0.2.0"
+edition = "2021"
+description = "Modular AI Agent Skills & Behavioral Guardrails for Antigravity, Antigravity CLI, and OpenCode"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Praveensenpai/karakuri"
+readme = "README.md"
+authors = ["Praveen Senpai <pvnt20@gmail.com>"]
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+inquire = { version = "0.7", default-features = false, features = ["crossterm"] }
+colored = "2.1"
+thiserror = "1.0"
+dirs = "5.0"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

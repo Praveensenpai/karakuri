@@ -20,3 +20,9 @@ Thumbs.db
 *.tmp
 *.bak
 *.log
+
+# Rust build artifacts
+target/
+
+# Local workspace installation
+.agents/

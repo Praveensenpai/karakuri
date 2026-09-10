@@ -5,7 +5,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-89b4fa?style=flat-square)](LICENSE)
 [![Skills Count](https://img.shields.io/badge/Skills-7%20Modular-cba6f7?style=flat-square)](skills/)
-[![Platform](https://img.shields.io/badge/Platform-Antigravity%20%7C%20Gemini-a6e3a1?style=flat-square)](https://github.com/Praveensenpai/karakuri)
+[![Language: Rust](https://img.shields.io/badge/Language-Rust%202021-f38ba8?style=flat-square)](Cargo.toml)
+[![Platform](https://img.shields.io/badge/Platform-Antigravity%20%7C%20OpenCode-a6e3a1?style=flat-square)](https://github.com/Praveensenpai/karakuri)
 [![Quality](https://img.shields.io/badge/Quality-Production%20Standards-fab387?style=flat-square)](rules/RULES.md)
 
 > [!TIP]
@@ -135,25 +136,61 @@ When adding a new skill to **Karakuri**:
 
 ### 🪄 One-Liner Magic (Recommended)
 
-Install all skills and global agent guardrails machine-wide with a single command:
+Launch the interactive installer with curated support exclusively for **Antigravity CLI**, **Antigravity**, and **OpenCode**:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Praveensenpai/karakuri/main/install.sh | bash
 ```
 
+Or install the standalone native binary via Cargo:
+```bash
+cargo install --git https://github.com/Praveensenpai/karakuri
+```
+
 Or from a local clone:
 ```bash
-./install.sh
+cargo install --path .
 ```
 
 <br>
 
-### 📁 Workspace Installation (Single Project)
-To add a skill to a specific repository:
-```bash
-mkdir -p .agents/skills/<skill-name>
-cp /path/to/karakuri/skills/<category>/<skill-name>/SKILL.md .agents/skills/<skill-name>/
+### 🎮 Interactive TUI Wizard
+
+Running `karakuri` launches the interactive terminal wizard with keyboard navigation (`↑`/`↓`, `Enter`):
+
+```text
+  ██╗  ██╗ █████╗ ██████╗  █████╗ ██╗  ██╗██╗   ██╗██████╗ ██╗
+  ██║ ██╔╝██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝██║   ██║██╔══██╗██║
+  █████╔╝ ███████║██████╔╝███████║█████╔╝ ██║   ██║██████╔╝██║
+  ██╔═██╗ ██╔══██║██╔══██╗██╔══██║██╔═██╗ ██║   ██║██╔══██╗██║
+  ██║  ██╗██║  ██║██║  ██║██║  ██║██║  ██╗╚██████╔╝██║  ██║██║
+  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝
+
+   karakuri   Modular AI Agent Skills & Behavioral Guardrails
+
+  │
+  ◇  Target Agents (Exclusive)
+  │  • Antigravity CLI
+  │  • Antigravity
+  │  • OpenCode
+  │
+  ◇ Installation scope
+  │  ● Project (Install in current directory / committed with your project)
+  │  ○ Global (Install machine-wide across ~/.gemini, ~/.agents, ~/.opencode)
 ```
+
+<br>
+
+### ⚡ Non-Interactive CLI Commands
+
+Script installations or add guardrails to projects directly:
+
+| Command | Scope | Target |
+| :--- | :--- | :--- |
+| `karakuri --project --rules -y` | **Project** (CWD) | Installs `./AGENTS.md`, `./GEMINI.md`, and `.agents/rules/` |
+| `karakuri --project --all -y` | **Project** (CWD) | Installs rules + all modular skills into `.agents/` |
+| `karakuri --global --rules -y` | **Global** | Installs to `~/.gemini/config/`, `~/.agents/`, `~/.opencode/` |
+| `karakuri --global --all -y` | **Global** | Installs global rules and all skills machine-wide |
 
 ---
 
@@ -162,12 +199,8 @@ cp /path/to/karakuri/skills/<category>/<skill-name>/SKILL.md .agents/skills/<ski
 Karakuri provides a standard behavioral contract in [`rules/RULES.md`](rules/RULES.md) (and [`rules/AGENTS.md`](rules/AGENTS.md)):
 
 - **Explicit Approval Protocol**: Mandatory requirement that AI agents explain **WHY** and **WHAT EFFECT** a change has, and obtain explicit user consent before editing code.
-- **Unified Standards Enforcement**: Directly references and enforces domain skills (`rust-clean-code`, `python-clean-code`, `git-release-craft`) without redundant rule sprawl.
-
-To enforce this in any repository, copy `rules/RULES.md` or `rules/AGENTS.md` to the root of your project:
-```bash
-cp /path/to/karakuri/rules/AGENTS.md ./AGENTS.md
-```
+- **Unified Standards Enforcement**: Directly references and enforces domain skills (`rust-clean-code`, `python-clean-code`, `git-release-craft`, `bash-clean-code`, `aesthetic-readme-craft`) without redundant rule sprawl.
+- **Exclusive Agent Support**: Seamlessly discovered and applied by **Antigravity CLI**, **Antigravity**, and **OpenCode**.
 
 ---
 
