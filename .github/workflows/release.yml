@@ -34,7 +34,7 @@ jobs:
             exe_suffix: ""
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            bin_name: karakuri-x86_64-windows.exe
+            bin_name: karakuri-x86_64-windows
             exe_suffix: ".exe"
 
     steps:
@@ -65,16 +65,23 @@ jobs:
         run: |
           cargo build --release --target ${{ matrix.target }}
 
-      - name: Package binary & compute checksums
+      - name: Package archive & compute checksums
         shell: bash
         run: |
           mkdir -p dist
           SRC_BIN="target/${{ matrix.target }}/release/karakuri${{ matrix.exe_suffix }}"
-          DEST_BIN="dist/${{ matrix.bin_name }}"
-          cp "${SRC_BIN}" "${DEST_BIN}"
-          if [[ "${{ matrix.target }}" == "aarch64-apple-darwin" ]]; then
-            cp "${SRC_BIN}" "dist/karakuri-aarch64-darwin"
+
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            cp "${SRC_BIN}" karakuri.exe
+            7z a "dist/${{ matrix.bin_name }}.zip" karakuri.exe
+          else
+            cp "${SRC_BIN}" karakuri
+            tar -czf "dist/${{ matrix.bin_name }}.tar.gz" karakuri
+            if [[ "${{ matrix.target }}" == "aarch64-apple-darwin" ]]; then
+              tar -czf "dist/karakuri-aarch64-darwin.tar.gz" karakuri
+            fi
           fi
+
           cd dist
           for file in *; do
             if [[ -f "${file}" ]]; then
@@ -86,7 +93,7 @@ jobs:
             fi
           done
 
-      - name: Upload binaries to GitHub Release
+      - name: Upload archives to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*

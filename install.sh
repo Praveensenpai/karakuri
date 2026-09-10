@@ -40,21 +40,22 @@ if command -v cargo >/dev/null 2>&1; then
     fi
 fi
 
-# 4. Fallback: Download precompiled release binary
+# 4. Fallback: Download precompiled release archive
 ARCH="$(uname -m)"
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
-BIN_NAME="karakuri-${ARCH}-${OS}"
-RELEASE_URL="https://github.com/Praveensenpai/karakuri/releases/latest/download/${BIN_NAME}"
+ARCHIVE_NAME="karakuri-${ARCH}-${OS}.tar.gz"
+RELEASE_URL="https://github.com/Praveensenpai/karakuri/releases/latest/download/${ARCHIVE_NAME}"
 
-TEMP_BIN="$(mktemp -t karakuri_bin.XXXXXXXXXX)"
-cleanup_bin() { rm -f "${TEMP_BIN}"; }
+TEMP_RUN_DIR="$(mktemp -d -t karakuri_bin.XXXXXXXXXX)"
+cleanup_bin() { rm -rf "${TEMP_RUN_DIR}"; }
 trap cleanup_bin EXIT INT TERM HUP
 
-if curl -fsSL "${RELEASE_URL}" -o "${TEMP_BIN}" 2>/dev/null; then
-    chmod +x "${TEMP_BIN}"
-    exec "${TEMP_BIN}" "$@"
+if curl -fsSL "${RELEASE_URL}" 2>/dev/null | tar -xzf - -C "${TEMP_RUN_DIR}" 2>/dev/null; then
+    if [[ -x "${TEMP_RUN_DIR}/karakuri" ]]; then
+        exec "${TEMP_RUN_DIR}/karakuri" "$@"
+    fi
 fi
 
-echo "Error: Neither cargo nor a precompiled binary could be found for ${ARCH}-${OS}." >&2
+echo "Error: Neither cargo nor a precompiled archive could be found for ${ARCH}-${OS}." >&2
 echo "Please install Rust (https://rustup.rs) to build karakuri." >&2
 exit 1
