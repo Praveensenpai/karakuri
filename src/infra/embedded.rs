@@ -20,10 +20,6 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         content: include_str!("../../skills/build-tooling/git-repo-craft/SKILL.md"),
     },
     SkillAsset {
-        name: "kbuild",
-        content: include_str!("../../skills/build-tooling/kbuild/SKILL.md"),
-    },
-    SkillAsset {
         name: "python-clean-code",
         content: include_str!("../../skills/build-tooling/python-clean-code/SKILL.md"),
     },

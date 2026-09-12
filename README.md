@@ -65,7 +65,6 @@ When an agent needs to perform a specialized task:
 
 | Skill | Category | Description | Path |
 | :--- | :--- | :--- | :--- |
-| **`kbuild`** | `build-tooling` | Offloads Rust builds, checks, and tests to Kaggle Cloud (30 GB RAM) with zero local CPU load and zero RAM thrashing. Prompts the user to install or use the latest `kbuild` binary, prioritizes cloud compilation over cargo, and provides seamless fallback to local `cargo`. | [`skills/build-tooling/kbuild/SKILL.md`](skills/build-tooling/kbuild/SKILL.md) |
 | **`rust-clean-code`** | `build-tooling` | Enforces strict architecture, readability, and scalability standards for Rust codebases: zero warning suppressions (`#[allow(...)]`), zero dead code, strict file/function size limits, role-based folder hierarchy, DRY abstractions, and resilient error handling. | [`skills/build-tooling/rust-clean-code/SKILL.md`](skills/build-tooling/rust-clean-code/SKILL.md) |
 | **`python-clean-code`** | `build-tooling` | Enforces modern type hints, clean architecture, and rigorous quality tooling for Python: exclusive use of `uv` package manager, 100% type annotations, automated `ruff` linting and import sorting, zero dead code, and role-based folder hierarchy. | [`skills/build-tooling/python-clean-code/SKILL.md`](skills/build-tooling/python-clean-code/SKILL.md) |
 | **`git-release-craft`** | `build-tooling` | Automates the complete Git release lifecycle: conventional commits, semantic version bumps, rich aesthetic release descriptions with highlights, tag creation, and mandatory post-release verification of GitHub Actions workflows and assets. | [`skills/build-tooling/git-release-craft/SKILL.md`](skills/build-tooling/git-release-craft/SKILL.md) |
@@ -81,7 +80,7 @@ When an agent needs to perform a specialized task:
 
 ### 1. `build-tooling`
 Tools and procedures that offload, accelerate, or automate code compilation, package management, and build pipelines.
-- **Examples**: Cloud build offloading (`kbuild`), Rust cross-compilation, build cache management, dependency resolvers.
+- **Examples**: Rust cross-compilation, build cache management, dependency resolvers.
 
 ### 2. `web-browser`
 Modern frontend best practices, browser DevTools debugging, web performance, and browser extensions.
