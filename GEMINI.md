@@ -31,6 +31,7 @@ All implementations must strictly adhere to the corresponding domain skills in K
   - **Zero Tolerance**: No unverified `# type: ignore` or `# noqa`.
 
 - **Releases & Versioning** (`skills/build-tooling/git-release-craft/`):
+  - **Mandatory Binary Release Trigger**: For any project producing compiled binaries or compile-time embedded assets (e.g. Rust, Go, C/C++), modifying code, dependencies, or embedded assets automatically mandates the complete release lifecycle (version bump, tag, release notes, publish, CI verification). Never stop at `git push` or leave binary users with stale distributions.
   - **Release Workflow**: Mandatory multi-arch GitHub Actions release workflow (`.github/workflows/release.yml`) for all compiled binary projects (`x86_64` + `aarch64`).
   - **Release Notes**: Aesthetic highlight format with icons and direct install commands.
   - **Autonomous Workflow Verification**: Actively track GitHub Actions CI/Release runs until green before declaring release complete. Autonomously diagnose and fix any pipeline failures in a closed self-healing loop without asking permission.

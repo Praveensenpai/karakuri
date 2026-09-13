@@ -12,14 +12,15 @@ Automates production releases with aesthetic, well-formatted release notes, mand
 
 ---
 
-## 1. The Golden Rule: Never Fire-and-Forget & Own Failures
+## 1. The Golden Rules: Never Stop at Git Push & Never Fire-and-Forget
 
-Creating a release is not finished when `git push` or `gh release create` exits. You must:
-1. **Ensure Release Workflows Exist**: Any project producing standalone compiled binaries must have a verified `.github/workflows/release.yml`.
-2. **Craft a Proper Description**: Never use blank releases or bare `--generate-notes`. Every release must follow the aesthetic highlight format.
-3. **Actively Monitor Workflows**: Watch the triggered GitHub Actions CI/Release pipelines until completion.
-4. **Autonomously Heal Failures**: If GitHub Actions or release builds fail, diagnose and fix them immediately without asking for permission to resolve release errors.
-5. **Verify Release Assets**: Confirm that compiled binaries, packages, or checksums are physically generated and attached to the release.
+1. **Mandatory Binary Release Trigger (Never Stop at `git push`)**:
+   For any repository producing or distributing standalone compiled binaries (Rust CLI, Go, C/C++, etc.) or embedding assets at compile time (such as `karakuri`), **a code modification is NEVER complete at `git push`**. Pushing to `main` without releasing leaves binary users and installer scripts with stale builds. Every commit modifying code, dependencies, or compile-time embedded assets MUST automatically trigger the complete release lifecycle: version bump, release tag, aesthetic notes, and closed-loop CI verification. Never wait for the user to ask "why didn't you release a tag?".
+2. **Ensure Release Workflows Exist**: Any project producing standalone compiled binaries must have a verified `.github/workflows/release.yml`.
+3. **Craft a Proper Description**: Never use blank releases or bare `--generate-notes`. Every release must follow the aesthetic highlight format.
+4. **Actively Monitor Workflows**: Watch the triggered GitHub Actions CI/Release pipelines until completion.
+5. **Autonomously Heal Failures**: If GitHub Actions or release builds fail, diagnose and fix them immediately without asking for permission to resolve release errors.
+6. **Verify Release Assets**: Confirm that compiled binaries, packages, or checksums are physically generated and attached to the release.
 
 ---
 
