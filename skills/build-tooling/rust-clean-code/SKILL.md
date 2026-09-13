@@ -20,6 +20,10 @@ Enforces strict production standards for Rust projects. Code must be idiomatic, 
 2. **WHAT EFFECT or FIX** it will produce.
 3. Receiving **explicit user approval** before modifying any code.
 
+### Operational Boundaries:
+- **Feature Requests & Code Refactoring (Approval Mandatory)**: Never silently start mutating or building code without explaining the rationale, impact, and getting confirmation.
+- **Autonomous Release & CI/CD Self-Healing (Zero Permission-Seeking)**: Once a release is initiated, if GitHub Actions, compilation, or packaging workflows fail due to an error introduced during release/build, fix the issue autonomously without asking permission. Deliver a verified green pipeline.
+
 ---
 
 ## 2. Zero Tolerance Rules (Non-Negotiable)
