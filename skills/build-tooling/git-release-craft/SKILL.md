@@ -2,7 +2,7 @@
 name: git-release-craft
 description: >-
   Automates the complete Git release lifecycle: atomic conventional commits, semantic version
-  bumps, mandatory multi-arch GitHub Actions workflows for binary apps, rich aesthetic release
+  bumps, mandatory Linux x86_64 GitHub Actions workflows for binary apps, rich aesthetic release
   descriptions, tag creation, and autonomous closed-loop workflow verification and self-healing.
 ---
 
@@ -24,14 +24,14 @@ Automates production releases with aesthetic, well-formatted release notes, mand
 
 ---
 
-## 2. Mandatory Workflow for Binary Projects
+## 2. Mandatory Release Workflow for Binary Projects (Linux x86_64)
 
 Before publishing a release for any repository that produces a standalone binary (e.g. Rust CLI or application, Go, C/C++):
 
 1. **Verify Workflow Existence**:
-   Check if `.github/workflows/release.yml` exists. If missing, create it before tagging.
+   Check if `.github/workflows/release.yml` exists. If missing, create it before tagging. Releases are strictly targeted to **Linux `x86_64` (`x86_64-unknown-linux-gnu`)** on `ubuntu-latest`.
 
-2. **Standard Multi-Arch Release Workflow Template (Rust Example)**:
+2. **Standard Linux x86_64 Release Workflow Template (Rust Example)**:
    Place at `.github/workflows/release.yml`:
 
 ```yaml
@@ -39,27 +39,16 @@ name: Release
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build-release:
-    name: Build (${{ matrix.target }})
+  publish:
+    name: Build & Publish (x86_64-unknown-linux-gnu)
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target: x86_64-unknown-linux-gnu
-            archive_name: <app>-x86_64-unknown-linux-gnu.tar.gz
-          - target: aarch64-unknown-linux-gnu
-            archive_name: <app>-aarch64-unknown-linux-gnu.tar.gz
 
     steps:
       - name: Checkout repository
@@ -68,62 +57,31 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.target }}
+          targets: x86_64-unknown-linux-gnu
 
       - name: Setup Rust Cache
         uses: Swatinem/rust-cache@v2
         with:
-          shared-key: "release-${{ matrix.target }}"
-          save-if: true
-
-      - name: Install cross-compilation toolchain for ARM64
-        if: matrix.target == 'aarch64-unknown-linux-gnu'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu
+          key: x86_64-unknown-linux-gnu
+          cache-all-crates: "true"
 
       - name: Build release binary
+        run: cargo build --release --target x86_64-unknown-linux-gnu
+
+      - name: Package archive & compute checksums
+        shell: bash
         run: |
-          if [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
-            export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
-          fi
-          cargo build --release --target ${{ matrix.target }}
+          mkdir -p dist
+          SRC_BIN="target/x86_64-unknown-linux-gnu/release/<binary_name>"
+          cp "${SRC_BIN}" <binary_name>
+          tar -czf "dist/<binary_name>-x86_64-linux.tar.gz" <binary_name>
+          cd dist
+          sha256sum * > "<binary_name>-x86_64-linux.tar.gz.sha256"
 
-      - name: Package release archive
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          mkdir -p staging
-          cp target/${{ matrix.target }}/release/<binary_name> staging/
-          cd staging
-          tar -czf ../${{ matrix.archive_name }} <binary_name>
-          cd ..
-
-      - name: Upload artifact
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.target }}
-          path: ${{ matrix.archive_name }}
-
-  publish-release:
-    name: Publish GitHub Release
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs: build-release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download all built artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          merge-multiple: true
-
-      - name: Create GitHub Release
+      - name: Upload archives to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: <Project Name> ${{ github.ref_name }}
-          files: artifacts/*.tar.gz
-          generate_release_notes: true
-          append_body: true
+          files: dist/*
 ```
 
 ---

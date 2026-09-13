@@ -10,88 +10,38 @@ permissions:
 
 jobs:
   publish:
-    name: Build & Publish (${{ matrix.target }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            bin_name: karakuri-x86_64-linux
-            exe_suffix: ""
-          - os: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-            bin_name: karakuri-aarch64-linux
-            exe_suffix: ""
-          - os: macos-latest
-            target: aarch64-apple-darwin
-            bin_name: karakuri-arm64-darwin
-            exe_suffix: ""
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            bin_name: karakuri-x86_64-darwin
-            exe_suffix: ""
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            bin_name: karakuri-x86_64-windows
-            exe_suffix: ".exe"
+    name: Build & Publish (x86_64-unknown-linux-gnu)
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Linux ARM64 cross-compiler
-        if: matrix.target == 'aarch64-unknown-linux-gnu'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu
-
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.target }}
+          targets: x86_64-unknown-linux-gnu
 
       - name: Cache cargo dependencies and target artifacts
         uses: Swatinem/rust-cache@v2
         with:
-          key: ${{ matrix.target }}
+          key: x86_64-unknown-linux-gnu
           cache-all-crates: "true"
 
       - name: Build release binary
         shell: bash
-        env:
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
         run: |
-          cargo build --release --target ${{ matrix.target }}
+          cargo build --release --target x86_64-unknown-linux-gnu
 
       - name: Package archive & compute checksums
         shell: bash
         run: |
           mkdir -p dist
-          SRC_BIN="target/${{ matrix.target }}/release/karakuri${{ matrix.exe_suffix }}"
-
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            cp "${SRC_BIN}" karakuri.exe
-            7z a "dist/${{ matrix.bin_name }}.zip" karakuri.exe
-          else
-            cp "${SRC_BIN}" karakuri
-            tar -czf "dist/${{ matrix.bin_name }}.tar.gz" karakuri
-            if [[ "${{ matrix.target }}" == "aarch64-apple-darwin" ]]; then
-              tar -czf "dist/karakuri-aarch64-darwin.tar.gz" karakuri
-            fi
-          fi
-
+          SRC_BIN="target/x86_64-unknown-linux-gnu/release/karakuri"
+          cp "${SRC_BIN}" karakuri
+          tar -czf "dist/karakuri-x86_64-linux.tar.gz" karakuri
           cd dist
-          for file in *; do
-            if [[ -f "${file}" ]]; then
-              if command -v sha256sum >/dev/null 2>&1; then
-                sha256sum "${file}" > "${file}.sha256"
-              elif command -v shasum >/dev/null 2>&1; then
-                shasum -a 256 "${file}" > "${file}.sha256"
-              fi
-            fi
-          done
+          sha256sum * > "karakuri-x86_64-linux.tar.gz.sha256"
 
       - name: Upload archives to GitHub Release
         uses: softprops/action-gh-release@v2
