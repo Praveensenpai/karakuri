@@ -71,6 +71,7 @@ When an agent needs to perform a specialized task:
 | **`git-repo-craft`** | `build-tooling` | Automates GitHub repository creation, editing, and metadata auditing: mandates minimal yet meaningful descriptions (<90 chars), curated discoverable topics, clean initialization, and active verification via GitHub CLI. | [`skills/build-tooling/git-repo-craft/SKILL.md`](skills/build-tooling/git-repo-craft/SKILL.md) |
 | **`aesthetic-readme-craft`** | `build-tooling` | Crafts stunning, aesthetic READMEs following Praveensenpai's design standard: badge ribbons, ASCII/Mermaid architecture diagrams, alert callouts, emoji feature matrices, and 1-liner installers. | [`skills/build-tooling/aesthetic-readme-craft/SKILL.md`](skills/build-tooling/aesthetic-readme-craft/SKILL.md) |
 | **`bash-clean-code`** | `system-ops` | Enforces production standards for Bash and POSIX shell scripting: strict error handling (`set -euo pipefail`), zero ShellCheck warnings, temporary file cleanup traps, XDG directory compliance, and portable OS/architecture detection. | [`skills/system-ops/bash-clean-code/SKILL.md`](skills/system-ops/bash-clean-code/SKILL.md) |
+| **`codebase-digest`** | `build-tooling` | Generates and maintains a high-density, AI-first `CODEBASE.md` index. Gives LLMs full architecture and symbol comprehension in a single file, with mandatory auto-updates at the end of each iteration. | [`skills/build-tooling/codebase-digest/SKILL.md`](skills/build-tooling/codebase-digest/SKILL.md) |
 
 *(New skills are added here on demand as specialized workflows are created.)*
 

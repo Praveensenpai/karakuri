@@ -47,3 +47,7 @@ All implementations must strictly adhere to the corresponding domain skills in K
 - **Bash & Shell Scripts** (`skills/system-ops/bash-clean-code/`):
   - **Preamble**: Mandatory `set -euo pipefail` and `IFS=$'\n\t'`.
   - **Zero Tolerance**: Zero ShellCheck warnings (`shellcheck -x`), mandatory trap cleanups for tempfiles, XDG compliance, strict variable quoting.
+
+- **AI Codebase Index** (`skills/build-tooling/codebase-digest/`):
+  - **Living Semantic Index**: Mandatory AI-first `CODEBASE.md` maintained in the root of the project with zero fluff, dense symbol skeletons, and module dependencies.
+  - **Iterative Auto-Update**: At the end of every turn/iteration involving file additions, deletions, renames, or signature modifications, `CODEBASE.md` must be updated before finishing the task.

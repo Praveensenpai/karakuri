@@ -31,4 +31,8 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         name: "bash-clean-code",
         content: include_str!("../../skills/system-ops/bash-clean-code/SKILL.md"),
     },
+    SkillAsset {
+        name: "codebase-digest",
+        content: include_str!("../../skills/build-tooling/codebase-digest/SKILL.md"),
+    },
 ];
