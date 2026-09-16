@@ -123,4 +123,5 @@ cargo fmt --check
 ```
 
 ## 6. Recent Iteration Changes
+- **2026-09-16**: Fixed `install.sh` bootstrap script where piping via `curl -fsSL ... | bash` was interrupted by early `/dev/tty` stdin redirection. Encapsulated installer logic in `main()` and deferred `/dev/tty` reconnection until binary execution.
 - **2026-09-13**: Added `codebase-digest` skill, registered in `embedded.rs`, updated rules and README, streamlined release to Linux x86_64.
