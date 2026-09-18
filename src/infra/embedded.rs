@@ -35,4 +35,8 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         name: "codebase-digest",
         content: include_str!("../../skills/build-tooling/codebase-digest/SKILL.md"),
     },
+    SkillAsset {
+        name: "tayori",
+        content: include_str!("../../skills/ai-agents/tayori/SKILL.md"),
+    },
 ];
