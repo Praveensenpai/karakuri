@@ -39,4 +39,8 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         name: "tayori",
         content: include_str!("../../skills/ai-agents/tayori/SKILL.md"),
     },
+    SkillAsset {
+        name: "systematic-code-verification",
+        content: include_str!("../../skills/build-tooling/systematic-code-verification/SKILL.md"),
+    },
 ];

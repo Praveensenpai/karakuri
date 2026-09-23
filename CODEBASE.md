@@ -70,7 +70,7 @@ CLI (args.rs) ──> Dispatcher (main.rs) ──> Domain Logic (agent, scope, c
   ```
 - **Consumers**: `src/main.rs`, `src/tui/prompts.rs`.
 
-### `src/infra/embedded.rs` (Role: Infra / Assets, Lines: 42)
+### `src/infra/embedded.rs` (Role: Infra / Assets, Lines: 46)
 - **Responsibility**: Compile-time embedded skills and rule files via `include_str!`.
 - **Types & Enums**:
   ```rust
@@ -123,6 +123,7 @@ cargo fmt --check
 ```
 
 ## 6. Recent Iteration Changes
+- **2026-09-23**: Added `systematic-code-verification` skill, embedded in `embedded.rs`, updated behavioral rules and README, bumped version to `0.2.10`.
 - **2026-09-18**: Added `tayori` AI-agent notification and alert skill to `skills/ai-agents/tayori/SKILL.md` and registered it in `src/infra/embedded.rs`. Bumped version to `v0.2.9`.
 - **2026-09-16**: Fixed `install.sh` bootstrap script where piping via `curl -fsSL ... | bash` was interrupted by early `/dev/tty` stdin redirection. Encapsulated installer logic in `main()` and deferred `/dev/tty` reconnection until binary execution.
 - **2026-09-13**: Added `codebase-digest` skill, registered in `embedded.rs`, updated rules and README, streamlined release to Linux x86_64.
