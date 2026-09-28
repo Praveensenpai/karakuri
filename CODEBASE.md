@@ -70,14 +70,14 @@ CLI (args.rs) ──> Dispatcher (main.rs) ──> Domain Logic (agent, scope, c
   ```
 - **Consumers**: `src/main.rs`, `src/tui/prompts.rs`.
 
-### `src/infra/embedded.rs` (Role: Infra / Assets, Lines: 46)
+### `src/infra/embedded.rs` (Role: Infra / Assets, Lines: 50)
 - **Responsibility**: Compile-time embedded skills and rule files via `include_str!`.
 - **Types & Enums**:
   ```rust
   pub struct SkillAsset { pub name: &'static str, pub content: &'static str }
   pub const AGENTS_MD: &str;
   pub const RULES_MD: &str;
-  pub const EMBEDDED_SKILLS: &[SkillAsset];
+  pub const EMBEDDED_SKILLS: &[SkillAsset]; // 10 modular skills
   ```
 - **Consumers**: `src/infra/installer.rs`.
 
@@ -123,6 +123,7 @@ cargo fmt --check
 ```
 
 ## 6. Recent Iteration Changes
+- **2026-09-28**: Added `compose-clean-code` skill under `skills/mobile-dev/compose-clean-code/SKILL.md` (Material 3, API 33+, zero-emoji policy, Material theme icons, type-safe navigation), embedded in `src/infra/embedded.rs`, updated Jetpack Compose engineering standards across `rules/RULES.md`, `rules/AGENTS.md`, `AGENTS.md`, and `GEMINI.md`, updated `README.md` catalog (10 modular skills), and bumped version to `0.2.11`.
 - **2026-09-23**: Added `systematic-code-verification` skill, embedded in `embedded.rs`, updated behavioral rules and README, bumped version to `0.2.10`.
 - **2026-09-18**: Added `tayori` AI-agent notification and alert skill to `skills/ai-agents/tayori/SKILL.md` and registered it in `src/infra/embedded.rs`. Bumped version to `v0.2.9`.
 - **2026-09-16**: Fixed `install.sh` bootstrap script where piping via `curl -fsSL ... | bash` was interrupted by early `/dev/tty` stdin redirection. Encapsulated installer logic in `main()` and deferred `/dev/tty` reconnection until binary execution.

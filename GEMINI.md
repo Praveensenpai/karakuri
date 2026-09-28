@@ -37,6 +37,11 @@ All implementations must strictly adhere to the corresponding domain skills in K
   - **Typing & Formatting**: 100% type annotations, automated `ruff check --fix`, import sorting (`isort`), and `ruff format` on every change.
   - **Zero Tolerance**: No unverified `# type: ignore` or `# noqa`.
 
+- **Jetpack Compose Projects** (`skills/mobile-dev/compose-clean-code/`):
+  - **Hard Limits**: <400 lines/file (300 soft), <60 lines/composable (40 soft), max 5 parameters, max 3 nesting depth, max 6 modifier chain.
+  - **Zero Tolerance**: Zero emojis in UI/layouts (strictly use Google Material theme icons, defaulting to Material icons if unspecified), no business logic/IO/coroutines in composition, modifier first-optional on root only, no ViewModel passing to children, immutable collections only, no `@Suppress` on Compose lints, stable lazy list keys.
+  - **Architecture & Theming**: Two-layer `XRoute` (ViewModel wiring) & `XScreen` (stateless), `collectAsStateWithLifecycle()`, Material 3 semantic tokens, type-safe navigation (`@Serializable` routes).
+
 - **Releases & Versioning** (`skills/build-tooling/git-release-craft/`):
   - **Mandatory Binary Release Trigger**: For any project producing compiled binaries or compile-time embedded assets (e.g. Rust, Go, C/C++), modifying code, dependencies, or embedded assets automatically mandates the complete release lifecycle (version bump, tag, release notes, publish, CI verification). Never stop at `git push` or leave binary users with stale distributions.
   - **Release Workflow**: Mandatory Linux x86_64 GitHub Actions release workflow (`.github/workflows/release.yml`) for all compiled binary projects (`x86_64-unknown-linux-gnu`).

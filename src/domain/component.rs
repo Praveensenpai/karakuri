@@ -11,7 +11,7 @@ impl InstallTarget {
     pub fn description(&self) -> &'static str {
         match self {
             Self::Rules => "Rules & Guardrails (AGENTS.md, GEMINI.md, RULES.md)",
-            Self::Skills => "Modular Skills (7 curated Karakuri skills)",
+            Self::Skills => "Modular Skills (10 curated Karakuri skills)",
             Self::All => "Everything (Rules + Skills)",
         }
     }

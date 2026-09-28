@@ -34,7 +34,7 @@ pub fn print_summary_card(scope: InstallationScope, target: InstallTarget) {
                     "  {}  {}    {}",
                     tree_v,
                     "│".bright_black(),
-                    "target ➔ Project-wide Modular Skills (7 skills)".bright_black()
+                    "target ➔ Project-wide Modular Skills (10 skills)".bright_black()
                 );
             }
         }

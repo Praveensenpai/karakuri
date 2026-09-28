@@ -43,4 +43,8 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         name: "systematic-code-verification",
         content: include_str!("../../skills/build-tooling/systematic-code-verification/SKILL.md"),
     },
+    SkillAsset {
+        name: "compose-clean-code",
+        content: include_str!("../../skills/mobile-dev/compose-clean-code/SKILL.md"),
+    },
 ];
