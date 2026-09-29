@@ -66,10 +66,8 @@ main() {
     fi
 
     # 4. Resolve preferred target bin directory in PATH
-    local INSTALL_DIR="${HOME}/.cargo/bin"
-    if [[ ! -d "${INSTALL_DIR}" ]] || [[ ":${PATH}:" != *":${INSTALL_DIR}:"* ]]; then
-        INSTALL_DIR="${HOME}/.local/bin"
-    fi
+    local INSTALL_DIR=""
+    INSTALL_DIR="$(resolve_install_dir "${CURRENT_BIN}")"
     mkdir -p "${INSTALL_DIR}"
 
     # 5. Download and install precompiled release binary
@@ -93,6 +91,7 @@ main() {
     if curl -fsSL "${RELEASE_URL}" 2>/dev/null | tar -xzf - -C "${TEMP_RUN_DIR}" 2>/dev/null; then
         if [[ -x "${TEMP_RUN_DIR}/karakuri" ]]; then
             install -m 755 "${TEMP_RUN_DIR}/karakuri" "${INSTALL_DIR}/karakuri"
+            sync_secondary_binary "${INSTALL_DIR}/karakuri"
             cleanup_bin
             trap - EXIT INT TERM HUP
             log_ok "Successfully installed Karakuri ${TARGET_TAG} to ${INSTALL_DIR}/karakuri"
@@ -104,12 +103,51 @@ main() {
     if command -v cargo >/dev/null 2>&1; then
         log_info "Notice: Compiling Karakuri ${TARGET_TAG} from source via Cargo..."
         cargo install --git "${REPO_URL}" --force --quiet
+        if [[ "${INSTALL_DIR}" != "${HOME}/.cargo/bin" && -f "${HOME}/.cargo/bin/karakuri" ]]; then
+            install -m 755 "${HOME}/.cargo/bin/karakuri" "${INSTALL_DIR}/karakuri"
+        fi
+        sync_secondary_binary "${INSTALL_DIR}/karakuri"
         log_ok "Successfully compiled and installed Karakuri ${TARGET_TAG}"
-        reconnect_tty_and_exec karakuri "$@"
+        reconnect_tty_and_exec "${INSTALL_DIR}/karakuri" "$@"
     fi
 
     echo "Error: Neither precompiled binary for ${ARCH}-${OS} nor cargo is available." >&2
     exit 1
+}
+
+resolve_install_dir() {
+    local current_bin="${1:-}"
+    if [[ -n "${current_bin}" && -w "$(dirname "${current_bin}")" ]]; then
+        dirname "${current_bin}"
+        return 0
+    fi
+
+    local local_bin="${HOME}/.local/bin"
+    local cargo_bin="${HOME}/.cargo/bin"
+
+    local old_ifs="${IFS}"
+    IFS=':'
+    for dir in ${PATH}; do
+        if [[ "${dir}" == "${local_bin}" || "${dir}" == "${cargo_bin}" ]]; then
+            IFS="${old_ifs}"
+            echo "${dir}"
+            return 0
+        fi
+    done
+    IFS="${old_ifs}"
+
+    echo "${local_bin}"
+}
+
+sync_secondary_binary() {
+    local primary="$1"
+    local candidate=""
+
+    for candidate in "${HOME}/.local/bin/karakuri" "${HOME}/.cargo/bin/karakuri"; do
+        if [[ "${candidate}" != "${primary}" && -f "${candidate}" && -w "${candidate}" ]]; then
+            install -m 755 "${primary}" "${candidate}"
+        fi
+    done
 }
 
 main "$@"

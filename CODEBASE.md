@@ -122,7 +122,7 @@ cargo clippy --all-targets -- -D warnings
 cargo fmt --check
 ```
 
-## 6. Recent Iteration Changes
+- **2026-09-29**: Fixed `install.sh` target resolution bug that caused version shadowing when upgrading. `install.sh` now resolves `INSTALL_DIR` to the active `CURRENT_BIN` location or prioritized `$PATH` entry, and automatically synchronizes secondary binaries across `~/.local/bin` and `~/.cargo/bin`.
 - **2026-09-29**: Enhanced `install.sh` bootstrap installer with aesthetic stderr version and progress logging (`log_info`, `log_ok`). Added version indicators for fresh installation, upgrades, and up-to-date status before launching Karakuri.
 - **2026-09-28**: Added `compose-clean-code` skill under `skills/mobile-dev/compose-clean-code/SKILL.md` (Material 3, API 33+, zero-emoji policy, Material theme icons, type-safe navigation), embedded in `src/infra/embedded.rs`, updated Jetpack Compose engineering standards across `rules/RULES.md`, `rules/AGENTS.md`, `AGENTS.md`, and `GEMINI.md`, updated `README.md` catalog (10 modular skills), and bumped version to `0.2.11`.
 - **2026-09-23**: Added `systematic-code-verification` skill, embedded in `embedded.rs`, updated behavioral rules and README, bumped version to `0.2.10`.
