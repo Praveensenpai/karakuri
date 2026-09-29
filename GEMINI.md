@@ -63,3 +63,8 @@ All implementations must strictly adhere to the corresponding domain skills in K
 - **AI Codebase Index** (`skills/build-tooling/codebase-digest/`):
   - **Living Semantic Index**: Mandatory AI-first `CODEBASE.md` maintained in the root of the project with zero fluff, dense symbol skeletons, and module dependencies.
   - **Iterative Auto-Update**: At the end of every turn/iteration involving file additions, deletions, renames, or signature modifications, `CODEBASE.md` must be updated before finishing the task.
+
+- **Writing & Prose** (`skills/writing/unslop/`):
+  - **AI Tell Removal**: Strip all AI vocabulary (delve, crucial, fostering, pivotal, vibrant, tapestry, testament, underscore, etc.), sycophantic phrases, em-dash overuse, boldface overuse, and filler phrases from every response, comment, commit message, and doc.
+  - **Karakuri Emoji Exception**: Emojis are allowed in README headings and feature bullet lists (required by `aesthetic-readme-craft`). Remove emojis from code comments, commit messages, and inline prose only.
+  - **Direct Communication**: No "I hope this helps!", "Of course!", "Great question!", or hedging chains. Respond directly.

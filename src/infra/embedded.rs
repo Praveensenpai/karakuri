@@ -47,4 +47,8 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         name: "compose-clean-code",
         content: include_str!("../../skills/mobile-dev/compose-clean-code/SKILL.md"),
     },
+    SkillAsset {
+        name: "unslop",
+        content: include_str!("../../skills/writing/unslop/SKILL.md"),
+    },
 ];

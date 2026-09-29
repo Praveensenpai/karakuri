@@ -4,7 +4,7 @@
 > A curated, categorized arsenal of modular AI agent skills designed for fast lookup and automated workflows.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-89b4fa?style=flat-square)](LICENSE)
-[![Skills Count](https://img.shields.io/badge/Skills-10%20Modular-cba6f7?style=flat-square)](skills/)
+[![Skills Count](https://img.shields.io/badge/Skills-11%20Modular-cba6f7?style=flat-square)](skills/)
 [![Language: Rust](https://img.shields.io/badge/Language-Rust%202021-f38ba8?style=flat-square)](Cargo.toml)
 [![Platform](https://img.shields.io/badge/Platform-Antigravity%20%7C%20OpenCode-a6e3a1?style=flat-square)](https://github.com/Praveensenpai/karakuri)
 [![Quality](https://img.shields.io/badge/Quality-Production%20Standards-fab387?style=flat-square)](rules/RULES.md)
@@ -75,6 +75,7 @@ When an agent needs to perform a specialized task:
 | **`systematic-code-verification`** | `build-tooling` | Eliminates the "fire-and-forget" assumption antipattern. Mandates a zero-assumption policy, a 3-phase verification cycle (static analysis, test suites, live runtime smoke tests), and mandatory terminal proof presentation. | [`skills/build-tooling/systematic-code-verification/SKILL.md`](skills/build-tooling/systematic-code-verification/SKILL.md) |
 | **`tayori`** | `ai-agents` | Integrates AI coding assistants with Telegram notifications via the `tayori` CLI: sends approval requests (`tayori ask`), completion alerts (`tayori done`), and critical errors (`tayori alert`). | [`skills/ai-agents/tayori/SKILL.md`](skills/ai-agents/tayori/SKILL.md) |
 | **`compose-clean-code`** | `mobile-dev` | Enforces architecture, performance, Material 3 theming, and quality standards for Jetpack Compose (API 33+): strict composable size limits, two-layer `XRoute`/`XScreen` separation, immutable collections, zero emojis (always Material theme icons), and lint enforcement. | [`skills/mobile-dev/compose-clean-code/SKILL.md`](skills/mobile-dev/compose-clean-code/SKILL.md) |
+| **`unslop`** | `writing` | Strips AI tells from any written output: removes AI vocabulary (delve, pivotal, tapestry, etc.), em-dash overuse, sycophantic phrases, boldface spam, and filler. Keeps prose direct and human. README headings may keep emojis. | [`skills/writing/unslop/SKILL.md`](skills/writing/unslop/SKILL.md) |
 
 *(New skills are added here on demand as specialized workflows are created.)*
 
