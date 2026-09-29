@@ -18,7 +18,10 @@ Integrates AI coding assistants with Telegram notifications via the `tayori` CLI
 ## Usage
 
 ```bash
-# 1. Ask for approval
+# 1. Interactive Mobile Approval (Blocks until user taps [Approve] or [Reject] on phone)
+tayori ask -i "I have prepared the migration. Should I proceed with deploying?"
+
+# 2. Asynchronous One-Way Notification
 tayori ask "I have prepared the migration. Should I proceed with deploying?"
 
 # 2. Notify task completion
