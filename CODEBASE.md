@@ -122,6 +122,7 @@ cargo clippy --all-targets -- -D warnings
 cargo fmt --check
 ```
 
+- **2026-10-01**: Mandated interactive approval mode (`tayori ask -i`) across `skills/ai-agents/tayori/SKILL.md`, `rules/RULES.md`, `rules/AGENTS.md`, `AGENTS.md`, and `GEMINI.md`. Documented exit code semantics and eliminated non-interactive fire-and-forget approval anti-pattern. Bumped version to `0.2.13`.
 - **2026-09-29**: Fixed `install.sh` target resolution bug that caused version shadowing when upgrading. `install.sh` now resolves `INSTALL_DIR` to the active `CURRENT_BIN` location or prioritized `$PATH` entry, and automatically synchronizes secondary binaries across `~/.local/bin` and `~/.cargo/bin`.
 - **2026-09-29**: Enhanced `install.sh` bootstrap installer with aesthetic stderr version and progress logging (`log_info`, `log_ok`). Added version indicators for fresh installation, upgrades, and up-to-date status before launching Karakuri.
 - **2026-09-29**: Added `unslop` skill under `skills/writing/unslop/SKILL.md` (prose hygiene, AI-tell removal, Karakuri emoji exception for README headings), embedded in `src/infra/embedded.rs`, updated writing standards across `AGENTS.md` and `GEMINI.md`, bumped version to `0.2.12`.
