@@ -1,7 +1,6 @@
-use std::process::exit;
-
 use clap::Parser;
 use colored::Colorize;
+use std::process::exit;
 
 mod cli;
 mod domain;
@@ -9,12 +8,25 @@ mod error;
 mod infra;
 mod tui;
 
-use cli::CliArgs;
+use cli::{AuditArgs, Cli, Command, DigestArgs, InstallArgs, SyncArgs};
 use error::Result;
 
 fn run() -> Result<()> {
-    let args = CliArgs::parse();
+    let cli = Cli::parse();
 
+    match cli.command {
+        Some(Command::Install(args)) => handle_install(args),
+        Some(Command::Audit(args)) => handle_audit(args),
+        Some(Command::Digest(args)) => handle_digest(args),
+        Some(Command::Sync(args)) => handle_sync(args),
+        None => {
+            let args = cli.resolved_install_args();
+            handle_install(args)
+        }
+    }
+}
+
+fn handle_install(args: InstallArgs) -> Result<()> {
     tui::print_banner();
     tui::print_header_info();
 
@@ -54,7 +66,45 @@ fn run() -> Result<()> {
 
     let records = infra::install(scope, target)?;
     tui::print_success_box(&records);
+    Ok(())
+}
 
+fn handle_audit(args: AuditArgs) -> Result<()> {
+    let opts = args.to_domain_options();
+    println!(
+        "  ◇  Auditing codebase at: {}",
+        opts.path.display().to_string().bright_cyan()
+    );
+    let report = infra::run_audit(&opts)?;
+    tui::print_audit_report(&report);
+
+    if !report.is_clean() {
+        exit(1);
+    }
+    Ok(())
+}
+
+fn handle_digest(args: DigestArgs) -> Result<()> {
+    println!(
+        "  ◇  Analyzing codebase at: {}",
+        args.path.display().to_string().bright_cyan()
+    );
+    let digest = infra::DigestBuilder::build(&args.path)?;
+
+    if args.stdout {
+        println!("{}", digest.render_markdown());
+    } else {
+        infra::DigestBuilder::write_to_file(&args.path, &digest)?;
+        let target_file = args.path.join("CODEBASE.md");
+        tui::print_digest_success(&digest, &target_file);
+    }
+    Ok(())
+}
+
+fn handle_sync(_args: SyncArgs) -> Result<()> {
+    println!("  ◇  Synchronizing skills across agent runtimes...");
+    let report = infra::SyncEngine::run()?;
+    tui::print_sync_report(&report);
     Ok(())
 }
 

@@ -1,133 +1,265 @@
-# CODEBASE.md: Karakuri Semantic Digest
+# CODEBASE.md: karakuri Semantic Digest
 
 > **Notice**: AI-optimized semantic index. Do not write narrative prose. Keep token density high.
 
 ## 1. System Topology & Data Flow
 ```text
-CLI (args.rs) ──> Dispatcher (main.rs) ──> Domain Logic (agent, scope, component) 
-                                       └──> Infra (installer.rs ──> embedded.rs assets)
-                                       └──> TUI (banner, cards, prompts)
+Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
 ```
 
 ## 2. Global Constraints & Architecture Patterns
-- **Language**: Rust 2021 edition.
-- **Architecture**: Role-based (`domain/`, `infra/`, `cli/`, `tui/`, `error.rs`). Modern module style (`foo.rs` + `foo/`).
-- **Hard Limits**: <400 lines/file, <60 lines/fn, zero production `unwrap()`/`expect()`.
-- **Target Distribution**: Standalone Linux x86_64 binary (`x86_64-unknown-linux-gnu`) via GitHub Releases.
+- **Primary Language**: Rust 2021 edition
+- **Architectural Paradigm**: Role-based (domain/, infra/, api/cli/, tui/)
+- **Hard Constraints**: <400 lines/file, <60 lines/fn, zero production unwrap(), 0 warnings.
+- **Target Distribution**: Linux x86_64 standalone binary
 
 ## 3. Module & Interface Skeleton
 
-### `src/main.rs` (Role: Entrypoint, Lines: 86)
-- **Responsibility**: Parses CLI arguments and routes execution to interactive TUI or headless installation.
-- **Imports**: `clap::Parser`, `crate::cli::args::*`, `crate::infra::installer::*`, `crate::tui::*`, `crate::error::Result`.
-- **Public Functions**: `fn main() -> Result<()>`
-- **Consumers**: OS process execution.
-- **Side Effects**: Reads CLI arguments, invokes installer, prints to stdout/stderr.
-
-### `src/error.rs` (Role: Error Handling, Lines: 36)
-- **Responsibility**: Centralized domain error definitions and Result alias.
-- **Imports**: `thiserror::Error`, `std::io`.
+### `src/cli/args.rs` (Role: cli, Lines: 180)
+- **Responsibility**: Core cli logic in src/cli/args.rs
+- **Imports**: use clap :: { Args , Parser , Subcommand } , use std :: path :: PathBuf , use crate :: domain :: { AuditOptions , InstallTarget , InstallationScope } 
 - **Types & Enums**:
   ```rust
-  pub enum KarakuriError { Io(std::io::Error), Config(String), UserCancelled, Interrupted }
-  pub type Result<T> = std::result::Result<T, KarakuriError>;
+  pub struct Cli
+  pub enum Command
+  pub struct InstallArgs
+  pub struct AuditArgs
+  pub struct DigestArgs
+  pub struct SyncArgs
   ```
-- **Consumers**: All modules (`main`, `infra`, `tui`, `cli`).
+- **Public Functions & Signatures**:
+  ```rust
+  fn to_domain_options (& self) -> AuditOptions
+  fn resolved_install_args (& self) -> InstallArgs
+  fn resolved_scope (& self) -> Option < InstallationScope >
+  fn resolved_target (& self) -> Option < InstallTarget >
+  ```
 
-### `src/cli/args.rs` (Role: CLI, Lines: 44)
-- **Responsibility**: Clap-derived command line argument parser schema.
+### `src/cli.rs` (Role: cli, Lines: 3)
+- **Responsibility**: Core cli logic in src/cli.rs
+- **Imports**: pub use args :: { AuditArgs , Cli , Command , DigestArgs , InstallArgs , SyncArgs } 
+
+### `src/domain/agent.rs` (Role: domain, Lines: 18)
+- **Responsibility**: Core domain logic in src/domain/agent.rs
 - **Types & Enums**:
   ```rust
-  pub struct CliArgs {
-      pub global: bool, pub project: bool, pub rules: bool,
-      pub skills: bool, pub all: bool, pub yes: bool,
-  }
+  pub enum SupportedAgent
   ```
-- **Consumers**: `src/main.rs`.
+- **Public Functions & Signatures**:
+  ```rust
+  fn display_name (& self) -> & 'static str
+  ```
 
-### `src/domain/agent.rs` (Role: Domain, Lines: 36)
-- **Responsibility**: Supported AI agent target platform metadata.
+### `src/domain/audit.rs` (Role: domain, Lines: 100)
+- **Responsibility**: Core domain logic in src/domain/audit.rs
+- **Imports**: use std :: path :: PathBuf 
 - **Types & Enums**:
   ```rust
-  pub enum Agent { Antigravity, AntigravityCli, OpenCode }
-  impl Agent { pub fn all() -> &'static [Agent]; pub fn name(&self) -> &'static str; pub fn config_dir(&self) -> &'static str; }
+  pub struct AuditOptions
+  pub enum ViolationKind
+  pub struct Violation
+  pub struct AuditReport
   ```
-- **Consumers**: `src/infra/installer.rs`.
+- **Public Functions & Signatures**:
+  ```rust
+  fn is_clean (& self) -> bool
+  ```
 
-### `src/domain/scope.rs` (Role: Domain, Lines: 24)
-- **Responsibility**: Target configuration scope (Global vs Project-level).
+### `src/domain/component.rs` (Role: domain, Lines: 32)
+- **Responsibility**: Core domain logic in src/domain/component.rs
+- **Imports**: use std :: fmt 
 - **Types & Enums**:
   ```rust
-  pub enum TargetScope { Global, Project }
+  pub enum InstallTarget
   ```
-- **Consumers**: `src/main.rs`, `src/infra/installer.rs`.
+- **Public Functions & Signatures**:
+  ```rust
+  fn description (& self) -> & 'static str
+  fn includes_rules (& self) -> bool
+  fn includes_skills (& self) -> bool
+  ```
 
-### `src/domain/component.rs` (Role: Domain, Lines: 24)
-- **Responsibility**: Selectable asset components (Rules, Skills, All).
+### `src/domain/digest.rs` (Role: domain, Lines: 152)
+- **Responsibility**: Core domain logic in src/domain/digest.rs
+- **Imports**: use std :: path :: PathBuf 
 - **Types & Enums**:
   ```rust
-  pub enum InstallComponent { Rules, Skills, All }
+  pub enum ModuleRole
+  pub struct ModuleDigest
+  pub struct CodebaseDigest
   ```
-- **Consumers**: `src/main.rs`, `src/tui/prompts.rs`.
+- **Public Functions & Signatures**:
+  ```rust
+  fn as_str (& self) -> & 'static str
+  fn infer_from_path (path : & str) -> Self
+  fn render_markdown (& self) -> String
+  ```
 
-### `src/infra/embedded.rs` (Role: Infra / Assets, Lines: 50)
-- **Responsibility**: Compile-time embedded skills and rule files via `include_str!`.
+### `src/domain/scope.rs` (Role: domain, Lines: 24)
+- **Responsibility**: Core domain logic in src/domain/scope.rs
+- **Imports**: use std :: fmt 
 - **Types & Enums**:
   ```rust
-  pub struct SkillAsset { pub name: &'static str, pub content: &'static str }
-  pub const AGENTS_MD: &str;
-  pub const RULES_MD: &str;
-  pub const EMBEDDED_SKILLS: &[SkillAsset]; // 11 modular skills (build-tooling ×7, system-ops ×1, mobile-dev ×1, ai-agents ×1, writing ×1)
+  pub enum InstallationScope
   ```
-- **Consumers**: `src/infra/installer.rs`.
-
-### `src/infra/installer.rs` (Role: Infra / File Operations, Lines: 145)
-- **Responsibility**: Writes embedded rules and skills to target filesystem directories (`~/.gemini/config/`, `~/.agents/`, `.agents/`).
-- **Public Functions**:
+- **Public Functions & Signatures**:
   ```rust
-  pub fn install_global(component: InstallComponent) -> Result<()>;
-  pub fn install_project(component: InstallComponent) -> Result<()>;
+  fn description (& self) -> & 'static str
   ```
-- **Consumers**: `src/main.rs`.
-- **Side Effects**: Filesystem directory creation and file writes.
 
-### `src/tui/banner.rs` (Role: TUI, Lines: 28)
-- **Responsibility**: ASCII art and stylized terminal banner printing.
-- **Public Functions**: `pub fn print_banner()`, `pub fn print_success(msg: &str)`
-- **Consumers**: `src/main.rs`.
+### `src/domain/sync.rs` (Role: domain, Lines: 38)
+- **Responsibility**: Core domain logic in src/domain/sync.rs
+- **Imports**: use std :: path :: PathBuf 
+- **Types & Enums**:
+  ```rust
+  pub struct AgentRuntime
+  pub enum SyncStatus
+  pub struct SkillSyncRecord
+  pub struct SyncReport
+  ```
+- **Public Functions & Signatures**:
+  ```rust
+  fn new (name : & 'static str , skills_dir : PathBuf) -> Self
+  ```
 
-### `src/tui/cards.rs` (Role: TUI, Lines: 48)
-- **Responsibility**: Stylized card layout printing for installed items.
-- **Public Functions**: `pub fn print_summary_card(title: &str, items: &[&str])`
-- **Consumers**: `src/main.rs`.
+### `src/domain.rs` (Role: domain, Lines: 12)
+- **Responsibility**: Core domain logic in src/domain.rs
+- **Imports**: pub use agent :: SupportedAgent , pub use audit :: AuditOptions , pub use component :: InstallTarget , pub use digest :: ModuleRole , pub use scope :: InstallationScope 
 
-### `src/tui/prompts.rs` (Role: TUI, Lines: 56)
-- **Responsibility**: Interactive terminal prompt for interactive configuration.
-- **Public Functions**: `pub fn prompt_interactive() -> Result<(TargetScope, InstallComponent)>`
-- **Consumers**: `src/main.rs`.
+### `src/error.rs` (Role: general, Lines: 23)
+- **Responsibility**: Core general logic in src/error.rs
+- **Imports**: use std :: path :: PathBuf , use thiserror :: Error 
+- **Types & Enums**:
+  ```rust
+  pub enum KarakuriError
+  ```
+
+### `src/infra/auditor.rs` (Role: infra, Lines: 124)
+- **Responsibility**: Core infra logic in src/infra/auditor.rs
+- **Imports**: use std :: fs , use std :: path :: Path , use std :: process :: Command , use walkdir :: { DirEntry , WalkDir } , use crate :: domain :: audit :: { AuditOptions , AuditReport , Violation , ViolationKind } , use crate :: error :: Result , use crate :: infra :: rust_analyzer :: RustAnalyzer 
+- **Public Functions & Signatures**:
+  ```rust
+  fn run_audit (opts : & AuditOptions) -> Result < AuditReport >
+  ```
+
+### `src/infra/digest_builder.rs` (Role: infra, Lines: 112)
+- **Responsibility**: Core infra logic in src/infra/digest_builder.rs
+- **Imports**: use std :: fs , use std :: path :: Path , use walkdir :: WalkDir , use crate :: domain :: digest :: { CodebaseDigest , ModuleDigest } , use crate :: error :: { KarakuriError , Result } , use crate :: infra :: rust_analyzer :: RustAnalyzer 
+- **Types & Enums**:
+  ```rust
+  pub struct DigestBuilder
+  ```
+- **Public Functions & Signatures**:
+  ```rust
+  fn build (dir : & Path) -> Result < CodebaseDigest >
+  fn write_to_file (dir : & Path , digest : & CodebaseDigest) -> Result < () >
+  ```
+
+### `src/infra/embedded.rs` (Role: infra, Lines: 54)
+- **Responsibility**: Core infra logic in src/infra/embedded.rs
+- **Types & Enums**:
+  ```rust
+  pub struct SkillAsset
+  ```
+
+### `src/infra/installer.rs` (Role: infra, Lines: 137)
+- **Responsibility**: Core infra logic in src/infra/installer.rs
+- **Imports**: use std :: fs , use std :: path :: { Path , PathBuf } , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: error :: { KarakuriError , Result } , use crate :: infra :: embedded :: { AGENTS_MD , EMBEDDED_SKILLS , RULES_MD } 
+- **Types & Enums**:
+  ```rust
+  pub struct InstalledRecord
+  ```
+- **Public Functions & Signatures**:
+  ```rust
+  fn install (scope : InstallationScope , target : InstallTarget) -> Result < Vec < InstalledRecord > >
+  ```
+
+### `src/infra/rust_analyzer.rs` (Role: infra, Lines: 302)
+- **Responsibility**: Core infra logic in src/infra/rust_analyzer.rs
+- **Imports**: use std :: path :: Path , use syn :: spanned :: Spanned , use syn :: { Expr , Item , ItemFn , ItemImpl , Stmt } , use crate :: domain :: audit :: { Violation , ViolationKind } , use crate :: domain :: digest :: ModuleDigest , use crate :: domain :: ModuleRole 
+- **Types & Enums**:
+  ```rust
+  pub struct RustAnalyzer
+  ```
+- **Public Functions & Signatures**:
+  ```rust
+  fn audit_source (path : & Path , content : & str , max_fn_lines : usize , max_nesting_depth : usize ,) -> Vec < Violation >
+  fn extract_digest (path : & Path , content : & str) -> ModuleDigest
+  ```
+
+### `src/infra/sync_engine.rs` (Role: infra, Lines: 132)
+- **Responsibility**: Core infra logic in src/infra/sync_engine.rs
+- **Imports**: use std :: fs , use std :: path :: Path , use crate :: domain :: sync :: { AgentRuntime , SkillSyncRecord , SyncReport , SyncStatus } , use crate :: error :: { KarakuriError , Result } 
+- **Types & Enums**:
+  ```rust
+  pub struct SyncEngine
+  ```
+- **Public Functions & Signatures**:
+  ```rust
+  fn run () -> Result < SyncReport >
+  ```
+
+### `src/infra.rs` (Role: infra, Lines: 11)
+- **Responsibility**: Core infra logic in src/infra.rs
+- **Imports**: pub use auditor :: run_audit , pub use digest_builder :: DigestBuilder , pub use installer :: install , pub use sync_engine :: SyncEngine 
+
+### `src/main.rs` (Role: general, Lines: 116)
+- **Responsibility**: Core general logic in src/main.rs
+- **Imports**: use clap :: Parser , use colored :: Colorize , use std :: process :: exit , use cli :: { AuditArgs , Cli , Command , DigestArgs , InstallArgs , SyncArgs } , use error :: Result 
+
+### `src/tui/banner.rs` (Role: tui, Lines: 67)
+- **Responsibility**: Core tui logic in src/tui/banner.rs
+- **Imports**: use colored :: Colorize , use crate :: domain :: SupportedAgent 
+- **Public Functions & Signatures**:
+  ```rust
+  fn print_banner ()
+  fn print_header_info ()
+  ```
+
+### `src/tui/cards.rs` (Role: tui, Lines: 233)
+- **Responsibility**: Core tui logic in src/tui/cards.rs
+- **Imports**: use colored :: Colorize , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: infra :: installer :: InstalledRecord 
+- **Public Functions & Signatures**:
+  ```rust
+  fn print_summary_card (scope : InstallationScope , target : InstallTarget)
+  fn print_security_card ()
+  fn print_success_box (records : & [InstalledRecord])
+  ```
+
+### `src/tui/prompts.rs` (Role: tui, Lines: 193)
+- **Responsibility**: Core tui logic in src/tui/prompts.rs
+- **Imports**: use std :: fmt :: Display , use std :: io :: { stdout , Write } , use colored :: Colorize , use crossterm :: { cursor , event :: { self , Event , KeyCode , KeyEventKind , KeyModifiers } , execute , terminal :: { self , ClearType } , } , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: error :: { KarakuriError , Result } 
+- **Public Functions & Signatures**:
+  ```rust
+  fn select_menu < T : Display > (symbol : & str , title : & str , options : & [T] , default_idx : usize ,) -> Result < usize >
+  fn select_scope () -> Result < InstallationScope >
+  fn select_target () -> Result < InstallTarget >
+  fn confirm_installation () -> Result < bool >
+  ```
+
+### `src/tui/reports.rs` (Role: tui, Lines: 197)
+- **Responsibility**: Core tui logic in src/tui/reports.rs
+- **Imports**: use colored :: Colorize , use std :: path :: Path , use crate :: domain :: audit :: { AuditReport , ViolationKind } , use crate :: domain :: digest :: CodebaseDigest , use crate :: domain :: sync :: { SyncReport , SyncStatus } 
+- **Public Functions & Signatures**:
+  ```rust
+  fn print_audit_report (report : & AuditReport)
+  fn print_digest_success (digest : & CodebaseDigest , path : & Path)
+  fn print_sync_report (report : & SyncReport)
+  ```
+
+### `src/tui.rs` (Role: tui, Lines: 9)
+- **Responsibility**: Core tui logic in src/tui.rs
+- **Imports**: pub use banner :: { print_banner , print_header_info } , pub use cards :: { print_security_card , print_success_box , print_summary_card } , pub use prompts :: { confirm_installation , select_scope , select_target } , pub use reports :: { print_audit_report , print_digest_success , print_sync_report } 
 
 ## 4. Execution Lifecycle Trace
-1. `src/main.rs::main()` invoked.
-2. `CliArgs::parse()` evaluates command-line flags.
-3. If flags are provided: Headless installation via `installer::install_global()` or `install_project()`.
-4. If no flags provided: `banner::print_banner()` displays TUI, `prompts::prompt_interactive()` collects scope and components.
-5. `installer::install_*` writes compile-time embedded assets from `embedded.rs` to disk.
-6. `cards::print_summary_card()` renders confirmation card; process exits with code 0.
+1. **Startup**: Entrypoint parses CLI flags & dispatches command.
+2. **Execution**: Core domain logic processes inputs and evaluates rules.
+3. **Persistence / I/O**: Domain logic calls infra for disk/terminal I/O.
+4. **Exit**: Graceful termination with standard exit codes.
 
 ## 5. Verification Commands
 ```bash
 cargo build --release --target x86_64-unknown-linux-gnu
 cargo test --all-targets
-cargo clippy --all-targets -- -D warnings
-cargo fmt --check
+cargo clippy --all-targets -- -D warnings && cargo fmt --check
 ```
-
-- **2026-10-01**: Mandated interactive approval mode (`tayori ask -i`) across `skills/ai-agents/tayori/SKILL.md`, `rules/RULES.md`, `rules/AGENTS.md`, `AGENTS.md`, and `GEMINI.md`. Documented exit code semantics and eliminated non-interactive fire-and-forget approval anti-pattern. Bumped version to `0.2.13`.
-- **2026-09-29**: Fixed `install.sh` target resolution bug that caused version shadowing when upgrading. `install.sh` now resolves `INSTALL_DIR` to the active `CURRENT_BIN` location or prioritized `$PATH` entry, and automatically synchronizes secondary binaries across `~/.local/bin` and `~/.cargo/bin`.
-- **2026-09-29**: Enhanced `install.sh` bootstrap installer with aesthetic stderr version and progress logging (`log_info`, `log_ok`). Added version indicators for fresh installation, upgrades, and up-to-date status before launching Karakuri.
-- **2026-09-29**: Added `unslop` skill under `skills/writing/unslop/SKILL.md` (prose hygiene, AI-tell removal, Karakuri emoji exception for README headings), embedded in `src/infra/embedded.rs`, updated writing standards across `AGENTS.md` and `GEMINI.md`, bumped version to `0.2.12`.
-- **2026-09-28**: Added `compose-clean-code` skill under `skills/mobile-dev/compose-clean-code/SKILL.md` (Material 3, API 33+, zero-emoji policy, Material theme icons, type-safe navigation), embedded in `src/infra/embedded.rs`, updated Jetpack Compose engineering standards across `rules/RULES.md`, `rules/AGENTS.md`, `AGENTS.md`, and `GEMINI.md`, updated `README.md` catalog (10 modular skills), and bumped version to `0.2.11`.
-- **2026-09-23**: Added `systematic-code-verification` skill, embedded in `embedded.rs`, updated behavioral rules and README, bumped version to `0.2.10`.
-- **2026-09-18**: Added `tayori` AI-agent notification and alert skill to `skills/ai-agents/tayori/SKILL.md` and registered it in `src/infra/embedded.rs`. Bumped version to `v0.2.9`.
-- **2026-09-16**: Fixed `install.sh` bootstrap script where piping via `curl -fsSL ... | bash` was interrupted by early `/dev/tty` stdin redirection. Encapsulated installer logic in `main()` and deferred `/dev/tty` reconnection until binary execution.
-- **2026-09-13**: Added `codebase-digest` skill, registered in `embedded.rs`, updated rules and README, streamlined release to Linux x86_64.

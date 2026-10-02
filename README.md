@@ -13,6 +13,12 @@
 > **Progressive Disclosure · Zero Context Bloat · 100% Deterministic**  
 > Skills are indexed by name and summary. Full operational procedures and domain guardrails are loaded on-demand only when explicitly triggered.
 
+<br>
+
+<p align="center">
+  <img src="assets/demo.gif" alt="Karakuri CLI Showcase" width="850">
+</p>
+
 ---
 
 ## 🏗️ Architecture & Resolution Flow
@@ -185,16 +191,25 @@ Running `karakuri` launches the interactive terminal wizard with keyboard naviga
 
 <br>
 
-### ⚡ Non-Interactive CLI Commands
+### ⚡ CLI Subcommands & Non-Interactive Workflows
 
-Script installations or add guardrails to projects directly:
+`karakuri` provides a full toolchain for auditing codebases, generating AI-first indexes, and keeping agent runtimes in sync:
+
+| Command | Description |
+| :--- | :--- |
+| `karakuri audit [PATH]` | Audits codebases against clean-code rules (<400 lines/file, <60 lines/fn, clippy 0 warnings, missing docs). |
+| `karakuri digest [PATH]` | AST-parses code to auto-generate or refresh a compliant `CODEBASE.md` semantic index. |
+| `karakuri sync` | Synchronizes custom skills across all detected agent runtimes (`~/.gemini`, `~/.agents`, `~/.claude`, `~/.codex`). |
+| `karakuri install [FLAGS]` | Installs skills and behavioral rules globally or into the current project directory. |
+
+#### Non-Interactive Installation Flags:
 
 | Command | Scope | Target |
 | :--- | :--- | :--- |
-| `karakuri --project --rules -y` | **Project** (CWD) | Installs `./AGENTS.md`, `./GEMINI.md`, and `.agents/rules/` |
-| `karakuri --project --all -y` | **Project** (CWD) | Installs rules + all modular skills into `.agents/` |
-| `karakuri --global --rules -y` | **Global** | Installs to `~/.gemini/config/`, `~/.agents/`, `~/.opencode/` |
-| `karakuri --global --all -y` | **Global** | Installs global rules and all skills machine-wide |
+| `karakuri install --project --rules -y` | **Project** (CWD) | Installs `./AGENTS.md`, `./GEMINI.md`, and `.agents/rules/` |
+| `karakuri install --project --all -y` | **Project** (CWD) | Installs rules + all modular skills into `.agents/` |
+| `karakuri install --global --rules -y` | **Global** | Installs to `~/.gemini/config/`, `~/.agents/`, `~/.opencode/` |
+| `karakuri install --global --all -y` | **Global** | Installs global rules and all skills machine-wide |
 
 ---
 

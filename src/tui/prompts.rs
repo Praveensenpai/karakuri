@@ -98,45 +98,59 @@ pub fn select_menu<T: Display>(
     execute!(stdout(), cursor::Hide)?;
     let _guard = RawModeGuard;
 
-    loop {
-        if let Event::Key(key) = event::read()? {
-            if key.kind != KeyEventKind::Press {
-                continue;
-            }
-
-            match key.code {
-                KeyCode::Up | KeyCode::Char('k') => {
-                    selected = if selected > 0 {
-                        selected - 1
-                    } else {
-                        total - 1
-                    };
-                    redraw_options(options, selected, lines_to_clear)?;
-                }
-                KeyCode::Down | KeyCode::Char('j') => {
-                    selected = if selected < total - 1 {
-                        selected + 1
-                    } else {
-                        0
-                    };
-                    redraw_options(options, selected, lines_to_clear)?;
-                }
-                KeyCode::Enter | KeyCode::Char('\r') | KeyCode::Char('\n') | KeyCode::Char(' ') => {
-                    break
-                }
-                KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-                    return Err(KarakuriError::Cancelled);
-                }
-                KeyCode::Esc | KeyCode::Char('q') => {
-                    return Err(KarakuriError::Cancelled);
-                }
-                _ => {}
-            }
-        }
-    }
-
+    run_menu_loop(options, &mut selected, lines_to_clear)?;
     drop(_guard);
 
+    clear_rendered_menu(lines_to_clear)?;
+    print_selected_item(&options[selected]);
+
+    Ok(selected)
+}
+
+fn run_menu_loop<T: Display>(
+    options: &[T],
+    selected: &mut usize,
+    lines_to_clear: u16,
+) -> Result<()> {
+    let total = options.len();
+    loop {
+        let event = event::read()?;
+        let Event::Key(key) = event else { continue };
+        if key.kind != KeyEventKind::Press {
+            continue;
+        }
+
+        match key.code {
+            KeyCode::Up | KeyCode::Char('k') => {
+                *selected = if *selected > 0 {
+                    *selected - 1
+                } else {
+                    total - 1
+                };
+                redraw_options(options, *selected, lines_to_clear)?;
+            }
+            KeyCode::Down | KeyCode::Char('j') => {
+                *selected = if *selected < total - 1 {
+                    *selected + 1
+                } else {
+                    0
+                };
+                redraw_options(options, *selected, lines_to_clear)?;
+            }
+            KeyCode::Enter | KeyCode::Char('\r') | KeyCode::Char('\n') | KeyCode::Char(' ') => {
+                break
+            }
+            KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+                return Err(KarakuriError::Cancelled);
+            }
+            KeyCode::Esc | KeyCode::Char('q') => return Err(KarakuriError::Cancelled),
+            _ => {}
+        }
+    }
+    Ok(())
+}
+
+fn clear_rendered_menu(lines_to_clear: u16) -> Result<()> {
     let mut out = stdout();
     for _ in 0..lines_to_clear {
         execute!(
@@ -145,17 +159,15 @@ pub fn select_menu<T: Display>(
             terminal::Clear(ClearType::CurrentLine)
         )?;
     }
-
-    let tree_v = "│".bright_black();
-    println!(
-        "  {}  {}",
-        tree_v,
-        options[selected].to_string().bright_cyan()
-    );
-    println!("  {}", tree_v);
     out.flush()?;
+    Ok(())
+}
 
-    Ok(selected)
+fn print_selected_item<T: Display>(item: &T) {
+    let tree_v = "│".bright_black();
+    println!("  {}  {}", tree_v, item.to_string().bright_cyan());
+    println!("  {}", tree_v);
+    let _ = stdout().flush();
 }
 
 pub fn select_scope() -> Result<InstallationScope> {

@@ -1,8 +1,8 @@
 [package]
 name = "karakuri"
-version = "0.2.13"
+version = "0.3.0"
 edition = "2021"
-description = "Modular AI Agent Skills & Behavioral Guardrails for Antigravity, Antigravity CLI, and OpenCode"
+description = "AI Codebase & Skill Repository Orchestrator for Antigravity, OpenCode, and Claude"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/Praveensenpai/karakuri"
 readme = "README.md"
@@ -14,6 +14,10 @@ crossterm = "0.27"
 colored = "2.1"
 thiserror = "1.0"
 dirs = "5.0"
+syn = { version = "3.0.6", features = ["full", "parsing"] }
+walkdir = "2.5.0"
+proc-macro2 = { version = "1.0.107", features = ["span-locations"] }
+quote = "1.0.47"
 
 [profile.release]
 opt-level = 3
