@@ -1,17 +1,27 @@
-# 🌸 からくり (Karakuri)
+# 🌸 からくり (karakuri) — AI Codebase & Skill Repository Orchestrator
 
-> **Karakuri (絡繰り)** — *Clever mechanical mechanisms and automations.*  
-> A curated, categorized arsenal of modular AI agent skills designed for fast lookup and automated workflows.
+> **High-performance AI codebase auditor, automated `CODEBASE.md` AST generator, and multi-agent skill synchronizer.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-89b4fa?style=flat-square)](LICENSE)
-[![Skills Count](https://img.shields.io/badge/Skills-11%20Modular-cba6f7?style=flat-square)](skills/)
-[![Language: Rust](https://img.shields.io/badge/Language-Rust%202021-f38ba8?style=flat-square)](Cargo.toml)
-[![Platform](https://img.shields.io/badge/Platform-Antigravity%20%7C%20OpenCode-a6e3a1?style=flat-square)](https://github.com/Praveensenpai/karakuri)
-[![Quality](https://img.shields.io/badge/Quality-Production%20Standards-fab387?style=flat-square)](rules/RULES.md)
+[![Latest Release](https://img.shields.io/github/v/release/Praveensenpai/karakuri?style=for-the-badge&color=89b4fa)](https://github.com/Praveensenpai/karakuri/releases)
+[![Rust Edition](https://img.shields.io/badge/Rust-2021%20Edition-DEA584?style=for-the-badge&logo=rust)](Cargo.toml)
+[![Platform](https://img.shields.io/badge/Platform-Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Praveensenpai/karakuri)
+[![Skills Count](https://img.shields.io/badge/Skills-11%20Modular-cba6f7?style=for-the-badge)](skills/)
+[![License](https://img.shields.io/badge/License-MIT%20%2F%20Apache--2.0-a6e3a1?style=for-the-badge)](LICENSE)
+
+<br>
+
+<p align="center">
+  <a href="#-quick-start">⚡ Quick Install</a> • 
+  <a href="#-key-features">✨ Key Features</a> • 
+  <a href="#️-architecture--orchestration-flow">🔄 Architecture</a> • 
+  <a href="#-cli-usage--subcommands">💻 CLI Commands</a> • 
+  <a href="#-skill-catalog">📚 Skill Catalog</a> • 
+  <a href="#️-behavioral-guardrails--approval-protocol">🛡️ Guardrails</a>
+</p>
 
 > [!TIP]
-> **Progressive Disclosure · Zero Context Bloat · 100% Deterministic**  
-> Skills are indexed by name and summary. Full operational procedures and domain guardrails are loaded on-demand only when explicitly triggered.
+> **Zero Assumptions · Evidence-Based Proof · Multi-Agent Synchronized**  
+> Karakuri eliminates code sprawl and context bloat. It audits repositories against strict clean-code limits, generates living AI-first `CODEBASE.md` indexes in sub-seconds, and keeps custom skills unified across all local AI agent environments.
 
 <br>
 
@@ -21,207 +31,150 @@
 
 ---
 
-## 🏗️ Architecture & Resolution Flow
+## 🏗️ Architecture & Orchestration Flow
 
 ```text
-┌──────────────────────────────────────────────────────────┐
-│   🤖 AI Coding Agent (Antigravity / Gemini CLI)          │
-│   · Receives user goal & analyzes requirements           │
-└────────────────────────────┬─────────────────────────────┘
-                             │  1. Match task against Skill Catalog
-                             ▼
-┌──────────────────────────────────────────────────────────┐
-│   🌸 からくり (Karakuri) Arsenal                         │
-│   · Progressive disclosure (names & descriptions)        │
-│   · Loads matching SKILL.md on-demand (< 0.05s)          │
-└────────────────────────────┬─────────────────────────────┘
-                             │  2. Inject clean domain rules & guardrails
-                             ▼
-┌──────────────────────────────────────────────────────────┐
-│   ✨ Production-Grade Execution                          │
-│   · Zero compiler / linter warnings                      │
-│   · Clean architecture & automated verification          │
-└──────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│                        🌸 からくり (karakuri) CLI                      │
+└───────┬───────────────────┬───────────────────┬────────────────┬───────┘
+        │                   │                   │                │
+        │ 1. audit          │ 2. digest         │ 3. sync        │ 4. install
+        ▼                   ▼                   ▼                ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│ Codebase      │   │ AST Parser    │   │ Cross-Agent   │   │ Interactive   │
+│ Auditor       │   │ & Indexer     │   │ Synchronizer  │   │ TUI Wizard    │
+│ · <400 LOC    │   │ · Rust `syn`  │   │ · ~/.gemini   │   │ · Scopes      │
+│ · <60 fn LOC  │   │ · Type tokens │   │ · ~/.agents   │   │ · Components  │
+│ · Nesting <=3 │   │ · Signatures  │   │ · ~/.claude   │   │ · Guardrails  │
+│ · Zero clippy │   │ · Module role │   │ · ~/.codex    │   │ · Project CWD │
+└───────┬───────┘   └───────┬───────┘   └───────┬───────┘   └───────┬───────┘
+        ▼                   ▼                   ▼                   ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│ Formatted Pass│   │ Generated     │   │ Idempotent    │   │ Behavioral    │
+│ / Fail Report │   │ `CODEBASE.md` │   │ Multi-Runtime │   │ Rules Active  │
+│ with line refs│   │ Living Index  │   │ Skill Parity  │   │ & Discovered  │
+└───────────────┘   └───────────────┘   └───────────────┘   └───────────────┘
 ```
 
 ---
 
-## 🧭 How to Navigate (For AI & Developers)
+## ✨ Key Features
 
-Skills are categorized logically so an AI agent can quickly identify where to look without scanning irrelevant procedures:
-
-```
-skills/
-├── build-tooling/      # Compilers, build offloading, CI/CD, language tools
-├── web-browser/        # Frontend development, browser automation, DevTools
-├── cloud-data/         # Cloud platforms, data pipelines, SQL, databases
-├── mobile-dev/         # Mobile development, Flutter, Android, iOS
-├── ai-agents/          # LLM integrations, prompt engineering, agent frameworks
-└── system-ops/         # OS administration, shell scripts, system performance
-```
-
-When an agent needs to perform a specialized task:
-1. Locate the relevant category in the **[Skill Catalog](#-skill-catalog)** below.
-2. Read the 2–3 line summary to verify it matches the user's intent.
-3. Open and follow the linked `SKILL.md` for full operational instructions.
+| Feature | Description |
+| :--- | :--- |
+| **🔍 Strict Codebase Auditor** | Recursively audits codebases against hard limits: `<400` LOC/file, `<60` LOC/function, max nesting depth `<=3`, and flags forbidden suppressions (`#[allow(dead_code)]`). |
+| **📑 Living Semantic Digest** | AST-parses codebases (via `syn`) to extract module roles, public structs, enums, and exact function signatures into a high-density, AI-first `CODEBASE.md`. |
+| **🔄 Cross-Agent Skill Sync** | Automatically detects and synchronizes custom agent skills across multiple local runtimes (`~/.gemini`, `~/.agents`, `~/.claude`, `~/.codex`). |
+| **🛡️ Behavioral Guardrails** | Embeds and installs standard behavioral contracts (Mandatory Explicit Approval, 3-phase systematic code verification, unslop prose hygiene). |
+| **🎮 Interactive TUI Wizard** | Standalone keyboard-driven terminal menu (`↑`/`↓`, `Enter`) for selecting install scopes (global vs project) and components. |
+| **⚡ Zero-Dependency Binary** | Compiles to a single standalone, stripped native binary for Linux x86_64 with zero runtime dependencies. |
 
 ---
 
-## 📚 Skill Catalog
-
-| Skill | Category | Description | Path |
-| :--- | :--- | :--- | :--- |
-| **`rust-clean-code`** | `build-tooling` | Enforces strict architecture, readability, and scalability standards for Rust codebases: zero warning suppressions (`#[allow(...)]`), zero dead code, strict file/function size limits, role-based folder hierarchy, DRY abstractions, and resilient error handling. | [`skills/build-tooling/rust-clean-code/SKILL.md`](skills/build-tooling/rust-clean-code/SKILL.md) |
-| **`python-clean-code`** | `build-tooling` | Enforces modern type hints, clean architecture, and rigorous quality tooling for Python: exclusive use of `uv` package manager, 100% type annotations, automated `ruff` linting and import sorting, zero dead code, and role-based folder hierarchy. | [`skills/build-tooling/python-clean-code/SKILL.md`](skills/build-tooling/python-clean-code/SKILL.md) |
-| **`git-release-craft`** | `build-tooling` | Automates the complete Git release lifecycle: conventional commits, semantic version bumps, rich aesthetic release descriptions with highlights, tag creation, and mandatory post-release verification of GitHub Actions workflows and assets. | [`skills/build-tooling/git-release-craft/SKILL.md`](skills/build-tooling/git-release-craft/SKILL.md) |
-| **`git-repo-craft`** | `build-tooling` | Automates GitHub repository creation, editing, and metadata auditing: mandates minimal yet meaningful descriptions (<90 chars), curated discoverable topics, clean initialization, and active verification via GitHub CLI. | [`skills/build-tooling/git-repo-craft/SKILL.md`](skills/build-tooling/git-repo-craft/SKILL.md) |
-| **`aesthetic-readme-craft`** | `build-tooling` | Crafts stunning, aesthetic READMEs following Praveensenpai's design standard: badge ribbons, ASCII/Mermaid architecture diagrams, alert callouts, emoji feature matrices, and 1-liner installers. | [`skills/build-tooling/aesthetic-readme-craft/SKILL.md`](skills/build-tooling/aesthetic-readme-craft/SKILL.md) |
-| **`bash-clean-code`** | `system-ops` | Enforces production standards for Bash and POSIX shell scripting: strict error handling (`set -euo pipefail`), zero ShellCheck warnings, temporary file cleanup traps, XDG directory compliance, and portable OS/architecture detection. | [`skills/system-ops/bash-clean-code/SKILL.md`](skills/system-ops/bash-clean-code/SKILL.md) |
-| **`codebase-digest`** | `build-tooling` | Generates and maintains a high-density, AI-first `CODEBASE.md` index. Gives LLMs full architecture and symbol comprehension in a single file, with mandatory auto-updates at the end of each iteration. | [`skills/build-tooling/codebase-digest/SKILL.md`](skills/build-tooling/codebase-digest/SKILL.md) |
-| **`systematic-code-verification`** | `build-tooling` | Eliminates the "fire-and-forget" assumption antipattern. Mandates a zero-assumption policy, a 3-phase verification cycle (static analysis, test suites, live runtime smoke tests), and mandatory terminal proof presentation. | [`skills/build-tooling/systematic-code-verification/SKILL.md`](skills/build-tooling/systematic-code-verification/SKILL.md) |
-| **`tayori`** | `ai-agents` | Integrates AI coding assistants with Telegram notifications via the `tayori` CLI: sends interactive approval requests (`tayori ask -i`), completion alerts (`tayori done`), and critical errors (`tayori alert`). | [`skills/ai-agents/tayori/SKILL.md`](skills/ai-agents/tayori/SKILL.md) |
-| **`compose-clean-code`** | `mobile-dev` | Enforces architecture, performance, Material 3 theming, and quality standards for Jetpack Compose (API 33+): strict composable size limits, two-layer `XRoute`/`XScreen` separation, immutable collections, zero emojis (always Material theme icons), and lint enforcement. | [`skills/mobile-dev/compose-clean-code/SKILL.md`](skills/mobile-dev/compose-clean-code/SKILL.md) |
-| **`unslop`** | `writing` | Strips AI tells from any written output: removes AI vocabulary (delve, pivotal, tapestry, etc.), em-dash overuse, sycophantic phrases, boldface spam, and filler. Keeps prose direct and human. README headings may keep emojis. | [`skills/writing/unslop/SKILL.md`](skills/writing/unslop/SKILL.md) |
-
-*(New skills are added here on demand as specialized workflows are created.)*
-
----
-
-## 📁 Category Breakdown
-
-### 1. `build-tooling`
-Tools and procedures that offload, accelerate, or automate code compilation, package management, and build pipelines.
-- **Examples**: Rust cross-compilation, build cache management, dependency resolvers.
-
-### 2. `web-browser`
-Modern frontend best practices, browser DevTools debugging, web performance, and browser extensions.
-- **Examples**: Chrome DevTools automation, Core Web Vitals optimization, accessibility (a11y) auditing, Manifest V3 extensions.
-
-### 3. `cloud-data`
-Cloud infrastructure, serverless runtimes, data warehouses, and ETL pipelines.
-- **Examples**: BigQuery optimization, dbt / Dataform pipelines, Apache Beam / Dataflow, cloud storage lifecycle.
-
-### 4. `mobile-dev`
-Mobile application development, multi-platform toolchains, and device automation.
-- **Examples**: Android CLI SDK management, Flutter architectures, widget/integration testing, declarative routing.
-
-### 5. `ai-agents`
-Building, orchestrating, and extending AI applications, function calling, and multi-agent systems.
-- **Examples**: Gemini API multimodal workflows, real-time Live API streaming, agent orchestration frameworks.
-
-### 6. `system-ops`
-System administration, operating system utilities, shell scripting, and hardware diagnostics.
-- **Examples**: Linux package cleaning, system metrics monitoring, service orchestration.
-
----
-
-## ➕ Adding a New Skill
-
-When adding a new skill to **Karakuri**:
-
-1. **Choose the Category**: Pick the appropriate folder under `skills/<category>/`.
-2. **Create the Skill Directory**:
-   ```bash
-   mkdir -p skills/<category>/<skill-name>
-   touch skills/<category>/<skill-name>/SKILL.md
-   ```
-3. **Format `SKILL.md` with YAML Frontmatter**:
-   ```markdown
-   ---
-   name: <skill-name>
-   description: >-
-     A concise 2-3 sentence description explaining WHAT this skill does
-     and WHEN the agent should activate it.
-   ---
-
-   # Skill Title
-
-   Detailed procedures, command mappings, and execution steps.
-   ```
-4. **Update Catalog**: Add an entry for the new skill in the [Skill Catalog](#-skill-catalog) table above with a concise 2–3 line summary.
-
----
-
-## 🚀 Installation & Usage in Projects
+## 🚀 Quick Start
 
 ### 🪄 One-Liner Magic (Recommended)
 
-Launch the interactive installer with curated support exclusively for **Antigravity CLI**, **Antigravity**, and **OpenCode**:
+Install the compiled standalone binary directly with automatic shell detection:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Praveensenpai/karakuri/main/install.sh | bash
 ```
 
-Or install the standalone native binary via Cargo:
-```bash
-cargo install --git https://github.com/Praveensenpai/karakuri
-```
-
-Or from a local clone:
-```bash
-cargo install --path .
-```
-
 <br>
 
-### 🎮 Interactive TUI Wizard
+### 🛠️ Building From Source
 
-Running `karakuri` launches the interactive terminal wizard with keyboard navigation (`↑`/`↓`, `Enter`):
-
-```text
-  ██╗  ██╗ █████╗ ██████╗  █████╗ ██╗  ██╗██╗   ██╗██████╗ ██╗
-  ██║ ██╔╝██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝██║   ██║██╔══██╗██║
-  █████╔╝ ███████║██████╔╝███████║█████╔╝ ██║   ██║██████╔╝██║
-  ██╔═██╗ ██╔══██║██╔══██╗██╔══██║██╔═██╗ ██║   ██║██╔══██╗██║
-  ██║  ██╗██║  ██║██║  ██║██║  ██║██║  ██╗╚██████╔╝██║  ██║██║
-  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝
-
-   karakuri   Modular AI Agent Skills & Behavioral Guardrails
-
-  │
-  ◇  Target Agents (Exclusive)
-  │  • Antigravity CLI
-  │  • Antigravity
-  │  • OpenCode
-  │
-  ◇ Installation scope
-  │  ● Project (Install in current directory / committed with your project)
-  │  ○ Global (Install machine-wide across ~/.gemini, ~/.agents, ~/.opencode)
+```bash
+git clone https://github.com/Praveensenpai/karakuri.git
+cd karakuri
+cargo build --release
+install -Dm 755 target/release/karakuri ~/.local/bin/karakuri
 ```
-
-<br>
-
-### ⚡ CLI Subcommands & Non-Interactive Workflows
-
-`karakuri` provides a full toolchain for auditing codebases, generating AI-first indexes, and keeping agent runtimes in sync:
-
-| Command | Description |
-| :--- | :--- |
-| `karakuri audit [PATH]` | Audits codebases against clean-code rules (<400 lines/file, <60 lines/fn, clippy 0 warnings, missing docs). |
-| `karakuri digest [PATH]` | AST-parses code to auto-generate or refresh a compliant `CODEBASE.md` semantic index. |
-| `karakuri sync` | Synchronizes custom skills across all detected agent runtimes (`~/.gemini`, `~/.agents`, `~/.claude`, `~/.codex`). |
-| `karakuri install [FLAGS]` | Installs skills and behavioral rules globally or into the current project directory. |
-
-#### Non-Interactive Installation Flags:
-
-| Command | Scope | Target |
-| :--- | :--- | :--- |
-| `karakuri install --project --rules -y` | **Project** (CWD) | Installs `./AGENTS.md`, `./GEMINI.md`, and `.agents/rules/` |
-| `karakuri install --project --all -y` | **Project** (CWD) | Installs rules + all modular skills into `.agents/` |
-| `karakuri install --global --rules -y` | **Global** | Installs to `~/.gemini/config/`, `~/.agents/`, `~/.opencode/` |
-| `karakuri install --global --all -y` | **Global** | Installs global rules and all skills machine-wide |
 
 ---
 
-## 🛡️ Project Rules & Behavioral Guardrails (`rules/`)
+## 💻 CLI Usage & Subcommands
+
+### 1. `karakuri audit [PATH]`
+Scans the target repository (defaults to `.`) against clean-code rules and documentation standards:
+
+```bash
+# Audit the current repository
+karakuri audit .
+
+# Audit an external repository with custom limits
+karakuri audit /path/to/project --max-file-lines 300 --max-fn-lines 40 --max-depth 2
+
+# Audit without running cargo clippy
+karakuri audit . --no-clippy
+```
+
+### 2. `karakuri digest [PATH]`
+Parses the target repository AST to generate or synchronize a living `CODEBASE.md` semantic index:
+
+```bash
+# Generate and write CODEBASE.md in project root
+karakuri digest .
+
+# Output formatted markdown to stdout without writing to disk
+karakuri digest . --stdout
+```
+
+### 3. `karakuri sync`
+Synchronizes custom skills across all detected agent directories (`~/.gemini/config/skills/`, `~/.agents/skills/`, `~/.claude/skills/`, `~/.codex/skills/`):
+
+```bash
+karakuri sync
+```
+
+### 4. `karakuri install [FLAGS]`
+Launches the interactive TUI wizard or installs rules and skills headlessly:
+
+```bash
+# Interactive TUI Wizard
+karakuri
+
+# Headless installation flags
+karakuri install --project --rules -y   # Current project only (committed with repo)
+karakuri install --project --all -y     # Current project with all skills
+karakuri install --global --rules -y    # Machine-wide across ~/.gemini, ~/.agents
+karakuri install --global --all -y      # Machine-wide rules and all skills
+```
+
+---
+
+## 📚 Skill Catalog
+
+Karakuri embeds 11 modular, battle-tested skills for AI coding agents:
+
+| Skill | Category | Description | Path |
+| :--- | :--- | :--- | :--- |
+| **`rust-clean-code`** | `build-tooling` | Enforces strict architecture, readability, and scalability for Rust: zero warning suppressions (`#[allow(...)]`), zero dead code, strict limits, role-based hierarchy, and resilient error handling. | [`skills/build-tooling/rust-clean-code/SKILL.md`](skills/build-tooling/rust-clean-code/SKILL.md) |
+| **`python-clean-code`** | `build-tooling` | Enforces modern type hints and quality tooling for Python: exclusive use of `uv`, 100% type annotations, automated `ruff` linting and formatting, zero dead code, and role-based hierarchy. | [`skills/build-tooling/python-clean-code/SKILL.md`](skills/build-tooling/python-clean-code/SKILL.md) |
+| **`git-release-craft`** | `build-tooling` | Automates the complete Git release lifecycle: conventional commits, semantic version bumps, aesthetic release descriptions, tags, and mandatory CI/CD verification. | [`skills/build-tooling/git-release-craft/SKILL.md`](skills/build-tooling/git-release-craft/SKILL.md) |
+| **`git-repo-craft`** | `build-tooling` | Automates GitHub repository metadata auditing: minimal descriptions (<90 chars), curated discoverable topics, clean initialization, and active verification via `gh`. | [`skills/build-tooling/git-repo-craft/SKILL.md`](skills/build-tooling/git-repo-craft/SKILL.md) |
+| **`aesthetic-readme-craft`** | `build-tooling` | Crafts stunning, aesthetic READMEs following Praveensenpai's design standard: badge ribbons, ASCII architecture diagrams, alert callouts, emoji feature matrices, and 1-liner installers. | [`skills/build-tooling/aesthetic-readme-craft/SKILL.md`](skills/build-tooling/aesthetic-readme-craft/SKILL.md) |
+| **`bash-clean-code`** | `system-ops` | Enforces production standards for Bash: strict error handling (`set -euo pipefail`), zero ShellCheck warnings, temporary file cleanup traps, and XDG compliance. | [`skills/system-ops/bash-clean-code/SKILL.md`](skills/system-ops/bash-clean-code/SKILL.md) |
+| **`codebase-digest`** | `build-tooling` | Generates and maintains a high-density, AI-first `CODEBASE.md` index. Gives LLMs full architecture and symbol comprehension in a single file without burning tool calls. | [`skills/build-tooling/codebase-digest/SKILL.md`](skills/build-tooling/codebase-digest/SKILL.md) |
+| **`systematic-code-verification`** | `build-tooling` | Eliminates the "fire-and-forget" assumption antipattern. Mandates a zero-assumption policy, a 3-phase verification cycle, and mandatory terminal proof presentation. | [`skills/build-tooling/systematic-code-verification/SKILL.md`](skills/build-tooling/systematic-code-verification/SKILL.md) |
+| **`tayori`** | `ai-agents` | Integrates AI coding assistants with Telegram notifications via the `tayori` CLI: interactive approval requests (`tayori ask -i`), completion alerts (`tayori done`), and critical errors (`tayori alert`). | [`skills/ai-agents/tayori/SKILL.md`](skills/ai-agents/tayori/SKILL.md) |
+| **`compose-clean-code`** | `mobile-dev` | Enforces architecture, performance, and Material 3 theming for Jetpack Compose: strict limits, two-layer `XRoute`/`XScreen` separation, immutable collections, and zero emojis. | [`skills/mobile-dev/compose-clean-code/SKILL.md`](skills/mobile-dev/compose-clean-code/SKILL.md) |
+| **`unslop`** | `writing` | Strips AI tells from written output: removes AI buzzwords (delve, pivotal, tapestry, etc.), em-dash overuse, sycophantic phrasing, and filler. Keeps communication direct and human. | [`skills/writing/unslop/SKILL.md`](skills/writing/unslop/SKILL.md) |
+
+---
+
+## 🛡️ Behavioral Guardrails & Approval Protocol
 
 Karakuri provides a standard behavioral contract in [`rules/RULES.md`](rules/RULES.md) (and [`rules/AGENTS.md`](rules/AGENTS.md)):
 
 - **Explicit Approval Protocol**: Mandatory requirement that AI agents explain **WHY** and **WHAT EFFECT** a change has, and obtain explicit user consent before editing code.
-- **Unified Standards Enforcement**: Directly references and enforces domain skills (`rust-clean-code`, `python-clean-code`, `git-release-craft`, `bash-clean-code`, `aesthetic-readme-craft`) without redundant rule sprawl.
-- **Exclusive Agent Support**: Seamlessly discovered and applied by **Antigravity CLI**, **Antigravity**, and **OpenCode**.
+- **Autonomous Error Self-Healing**: Once a task or release is approved, the agent owns compiler errors, clippy warnings, and CI failures in a closed loop until verified green without permission-seeking.
+- **Evidence-Based Proof**: Mandates terminal command execution and exit code verification before declaring any task complete.
 
 ---
 
 ## 📜 License
-MIT OR Apache-2.0 © Praveensenpai
+
+Licensed under either of [Apache License, Version 2.0](LICENSE) or [MIT License](LICENSE) at your option.  
+© Praveen Senpai ([@Praveensenpai](https://github.com/Praveensenpai))
