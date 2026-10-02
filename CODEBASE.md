@@ -99,7 +99,6 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
 - **Responsibility**: Core domain logic in src/domain/scope.rs
 - **Imports**: use std :: fmt 
 - **Types & Enums**:
-  ```rust
   pub enum InstallationScope
   ```
 - **Public Functions & Signatures**:

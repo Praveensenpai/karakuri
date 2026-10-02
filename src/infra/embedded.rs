@@ -40,6 +40,10 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         content: include_str!("../../skills/ai-agents/tayori/SKILL.md"),
     },
     SkillAsset {
+        name: "kuroko",
+        content: include_str!("../../skills/ai-agents/kuroko/SKILL.md"),
+    },
+    SkillAsset {
         name: "systematic-code-verification",
         content: include_str!("../../skills/build-tooling/systematic-code-verification/SKILL.md"),
     },
