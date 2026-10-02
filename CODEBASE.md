@@ -155,7 +155,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn write_to_file (dir : & Path , digest : & CodebaseDigest) -> Result < () >
   ```
 
-### `src/infra/embedded.rs` (Role: infra, Lines: 54)
+### `src/infra/embedded.rs` (Role: infra, Lines: 58)
 - **Responsibility**: Core infra logic in src/infra/embedded.rs
 - **Types & Enums**:
   ```rust

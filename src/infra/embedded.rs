@@ -51,4 +51,8 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         name: "unslop",
         content: include_str!("../../skills/writing/unslop/SKILL.md"),
     },
+    SkillAsset {
+        name: "karakuri",
+        content: include_str!("../../skills/build-tooling/karakuri/SKILL.md"),
+    },
 ];
