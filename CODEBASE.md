@@ -99,6 +99,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
 - **Responsibility**: Core domain logic in src/domain/scope.rs
 - **Imports**: use std :: fmt 
 - **Types & Enums**:
+  ```rust
   pub enum InstallationScope
   ```
 - **Public Functions & Signatures**:
@@ -154,7 +155,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn write_to_file (dir : & Path , digest : & CodebaseDigest) -> Result < () >
   ```
 
-### `src/infra/embedded.rs` (Role: infra, Lines: 58)
+### `src/infra/embedded.rs` (Role: infra, Lines: 62)
 - **Responsibility**: Core infra logic in src/infra/embedded.rs
 - **Types & Enums**:
   ```rust
