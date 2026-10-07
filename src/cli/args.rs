@@ -8,7 +8,7 @@ use crate::domain::{AuditOptions, InstallTarget, InstallationScope, UpdateOption
     name = "karakuri",
     author = "Praveen Senpai <pvnt20@gmail.com>",
     version,
-    about = "AI Codebase & Skill Repository Orchestrator for Antigravity, OpenCode, and Claude",
+    about = "AI Codebase & Skill Repository Orchestrator with self-update for Antigravity, OpenCode, and Claude",
     long_about = None
 )]
 pub struct Cli {
