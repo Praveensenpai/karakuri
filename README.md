@@ -68,6 +68,7 @@
 | **🛡️ Behavioral Guardrails** | Embeds and installs standard behavioral contracts (Mandatory Explicit Approval, 3-phase systematic code verification, unslop prose hygiene). |
 | **🎮 Interactive TUI Wizard** | Standalone keyboard-driven terminal menu (`↑`/`↓`, `Enter`) for selecting install scopes (global vs project) and components. |
 | **⚡ Zero-Dependency Binary** | Compiles to a single standalone, stripped native binary for Linux x86_64 with zero runtime dependencies. |
+| **🔄 Self-Update Command** | `karakuri update` fetches the latest release, verifies its SHA-256 checksum, and atomically replaces the running binary, with a `cargo install` fallback. |
 
 ---
 
@@ -141,6 +142,22 @@ karakuri install --project --all -y     # Current project with all skills
 karakuri install --global --rules -y    # Machine-wide across ~/.gemini, ~/.agents
 karakuri install --global --all -y      # Machine-wide rules and all skills
 ```
+
+### 5. `karakuri update [FLAGS]`
+Self-updates the running binary by fetching the latest GitHub release, verifying its SHA-256 checksum, and replacing the executable in place:
+
+```bash
+# Check whether a newer release exists (no install)
+karakuri update --check
+
+# Fetch and install the latest release
+karakuri update
+
+# Reinstall even when already current
+karakuri update --force
+```
+
+Falls back to `cargo install --git` when no prebuilt asset matches the host. Also mirrors the refreshed binary into writable `~/.local/bin` and `~/.cargo/bin` copies, matching `install.sh`.
 
 ---
 

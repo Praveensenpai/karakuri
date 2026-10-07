@@ -4,6 +4,7 @@ use std::path::Path;
 use crate::domain::audit::{AuditReport, ViolationKind};
 use crate::domain::digest::CodebaseDigest;
 use crate::domain::sync::{SyncReport, SyncStatus};
+use crate::domain::UpdateOutcome;
 
 /// Prints a colorized, aesthetic audit report.
 pub fn print_audit_report(report: &AuditReport) {
@@ -164,7 +165,55 @@ pub fn print_digest_success(digest: &CodebaseDigest, path: &Path) {
     );
 }
 
-/// Prints skill synchronization report across runtimes.
+/// Prints the outcome of a self-update run.
+pub fn print_update_report(outcome: &UpdateOutcome) {
+    println!("\n  {}", "─── Self-Update Report ───".bright_cyan().bold());
+
+    match outcome {
+        UpdateOutcome::UpToDate { current, latest } => {
+            println!(
+                "  Current: {}   Latest: {}",
+                current.bright_white(),
+                latest.bright_white()
+            );
+            println!(
+                "\n  {} {}\n",
+                "✔".bright_green().bold(),
+                "Already running the latest release.".bright_green()
+            );
+        }
+        UpdateOutcome::Available { current, latest } => {
+            println!(
+                "  Current: {}   Latest: {}",
+                current.bright_white(),
+                latest.bright_yellow().bold()
+            );
+            println!(
+                "\n  {} {}\n",
+                "↑".bright_yellow().bold(),
+                "A newer release is available. Run `karakuri update` to install it."
+                    .bright_yellow()
+            );
+        }
+        UpdateOutcome::Updated { from, to, path } => {
+            println!("  {} → {}", from.bright_white(), to.bright_green().bold());
+            println!("  Path: {}", path.display().to_string().bright_cyan());
+            println!(
+                "\n  {} {}\n",
+                "✔".bright_green().bold(),
+                "Karakuri updated successfully.".bright_green().bold()
+            );
+        }
+        UpdateOutcome::BuiltFromSource { to } => {
+            println!("  Installed: {}", to.bright_green().bold());
+            println!(
+                "\n  {} {}\n",
+                "✔".bright_green().bold(),
+                "Compiled and installed from source via cargo.".bright_green()
+            );
+        }
+    }
+}
 pub fn print_sync_report(report: &SyncReport) {
     println!(
         "\n  {}",

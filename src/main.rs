@@ -8,7 +8,7 @@ mod error;
 mod infra;
 mod tui;
 
-use cli::{AuditArgs, Cli, Command, DigestArgs, InstallArgs, SyncArgs};
+use cli::{AuditArgs, Cli, Command, DigestArgs, InstallArgs, SyncArgs, UpdateArgs};
 use error::Result;
 
 fn run() -> Result<()> {
@@ -19,6 +19,7 @@ fn run() -> Result<()> {
         Some(Command::Audit(args)) => handle_audit(args),
         Some(Command::Digest(args)) => handle_digest(args),
         Some(Command::Sync(args)) => handle_sync(args),
+        Some(Command::Update(args)) => handle_update(args),
         None => {
             let args = cli.resolved_install_args();
             handle_install(args)
@@ -105,6 +106,13 @@ fn handle_sync(_args: SyncArgs) -> Result<()> {
     println!("  ◇  Synchronizing skills across agent runtimes...");
     let report = infra::SyncEngine::run()?;
     tui::print_sync_report(&report);
+    Ok(())
+}
+
+fn handle_update(args: UpdateArgs) -> Result<()> {
+    println!("  ◇  Checking for the latest Karakuri release...");
+    let outcome = infra::Updater::run(&args.to_domain_options())?;
+    tui::print_update_report(&outcome);
     Ok(())
 }
 

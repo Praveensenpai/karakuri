@@ -1,7 +1,7 @@
 use clap::{Args, Parser, Subcommand};
 use std::path::PathBuf;
 
-use crate::domain::{AuditOptions, InstallTarget, InstallationScope};
+use crate::domain::{AuditOptions, InstallTarget, InstallationScope, UpdateOptions};
 
 #[derive(Parser, Debug)]
 #[command(
@@ -50,6 +50,8 @@ pub enum Command {
     Digest(DigestArgs),
     /// Synchronize skills across all detected agent runtimes
     Sync(SyncArgs),
+    /// Fetch and install the latest release binary
+    Update(UpdateArgs),
 }
 
 #[derive(Args, Debug, Default, Clone)]
@@ -140,6 +142,26 @@ pub struct SyncArgs {
     /// Perform a dry-run without writing any files
     #[arg(long)]
     pub dry_run: bool,
+}
+
+#[derive(Args, Debug, Default, Clone)]
+pub struct UpdateArgs {
+    /// Report whether an update is available without installing it
+    #[arg(long)]
+    pub check: bool,
+
+    /// Reinstall even when already on the latest release
+    #[arg(long)]
+    pub force: bool,
+}
+
+impl UpdateArgs {
+    pub fn to_domain_options(&self) -> UpdateOptions {
+        UpdateOptions {
+            check_only: self.check,
+            force: self.force,
+        }
+    }
 }
 
 impl Cli {

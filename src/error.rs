@@ -18,6 +18,25 @@ pub enum KarakuriError {
 
     #[error("Operation cancelled by user")]
     Cancelled,
+
+    #[error("Network request to {url} failed: {message}")]
+    Network { url: String, message: String },
+
+    #[error("Checksum mismatch for {artifact}: expected {expected}, got {actual}")]
+    ChecksumMismatch {
+        artifact: String,
+        expected: String,
+        actual: String,
+    },
+
+    #[error("Could not determine the running executable path: {0}")]
+    CurrentExe(String),
+
+    #[error("Release asset {0} has an unexpected layout: missing `karakuri` binary")]
+    MalformedArchive(String),
+
+    #[error("Architecture {arch} on {os} has no prebuilt asset and cargo is unavailable")]
+    UnsupportedPlatform { arch: String, os: String },
 }
 
 pub type Result<T> = std::result::Result<T, KarakuriError>;
