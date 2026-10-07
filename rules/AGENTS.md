@@ -37,6 +37,11 @@ All implementations must strictly adhere to the corresponding domain skills in K
   - **Typing & Formatting**: 100% type annotations, automated `ruff check --fix`, import sorting (`isort`), and `ruff format` on every change.
   - **Zero Tolerance**: No unverified `# type: ignore` or `# noqa`.
 
+- **Python Error Handling** (`skills/build-tooling/rust-style-python/`):
+  - **Errors as Values**: Functions that can fail return typed `Result[T, E]`; never `None` or bare `Exception`.
+  - **Boundary-Only Catches**: `try/except` lives solely in boundary functions and `main`; core logic never raises.
+  - **Exit-Code Mapping**: `main` returns `0` ok, `1` runtime error, `2` usage/validation error, `130` interrupted.
+
 - **Jetpack Compose Projects** (`skills/mobile-dev/compose-clean-code/`):
   - **Hard Limits**: <400 lines/file (300 soft), <60 lines/composable (40 soft), max 5 parameters, max 3 nesting depth, max 6 modifier chain.
   - **Zero Tolerance**: Zero emojis in UI/layouts (strictly use Google Material theme icons, defaulting to Material icons if unspecified), no business logic/IO/coroutines in composition, modifier first-optional on root only, no ViewModel passing to children, immutable collections only, no `@Suppress` on Compose lints, stable lazy list keys.

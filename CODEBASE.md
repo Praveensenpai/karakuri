@@ -155,7 +155,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn write_to_file (dir : & Path , digest : & CodebaseDigest) -> Result < () >
   ```
 
-### `src/infra/embedded.rs` (Role: infra, Lines: 62)
+### `src/infra/embedded.rs` (Role: infra, Lines: 66)
 - **Responsibility**: Core infra logic in src/infra/embedded.rs
 - **Types & Enums**:
   ```rust
@@ -216,9 +216,9 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn print_header_info ()
   ```
 
-### `src/tui/cards.rs` (Role: tui, Lines: 233)
+### `src/tui/cards.rs` (Role: tui, Lines: 238)
 - **Responsibility**: Core tui logic in src/tui/cards.rs
-- **Imports**: use colored :: Colorize , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: infra :: installer :: InstalledRecord 
+- **Imports**: use colored :: Colorize , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: infra :: embedded :: EMBEDDED_SKILLS , use crate :: infra :: installer :: InstalledRecord 
 - **Public Functions & Signatures**:
   ```rust
   fn print_summary_card (scope : InstallationScope , target : InstallTarget)

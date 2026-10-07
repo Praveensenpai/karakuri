@@ -1,6 +1,7 @@
 use colored::Colorize;
 
 use crate::domain::{InstallTarget, InstallationScope};
+use crate::infra::embedded::EMBEDDED_SKILLS;
 use crate::infra::installer::InstalledRecord;
 
 pub fn print_summary_card(scope: InstallationScope, target: InstallTarget) {
@@ -34,7 +35,11 @@ pub fn print_summary_card(scope: InstallationScope, target: InstallTarget) {
                     "  {}  {}    {}",
                     tree_v,
                     "│".bright_black(),
-                    "target ➔ Project-wide Modular Skills (10 skills)".bright_black()
+                    format!(
+                        "target ➔ Project-wide Modular Skills ({} skills)",
+                        EMBEDDED_SKILLS.len()
+                    )
+                    .bright_black()
                 );
             }
         }

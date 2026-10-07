@@ -5,7 +5,7 @@
 [![Latest Release](https://img.shields.io/github/v/release/Praveensenpai/karakuri?style=for-the-badge&color=89b4fa)](https://github.com/Praveensenpai/karakuri/releases)
 [![Rust Edition](https://img.shields.io/badge/Rust-2021%20Edition-DEA584?style=for-the-badge&logo=rust)](Cargo.toml)
 [![Platform](https://img.shields.io/badge/Platform-Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Praveensenpai/karakuri)
-[![Skills Count](https://img.shields.io/badge/Skills-12%20Modular-cba6f7?style=for-the-badge)](skills/)
+[![Skills Count](https://img.shields.io/badge/Skills-14%20Modular-cba6f7?style=for-the-badge)](skills/)
 [![License](https://img.shields.io/badge/License-MIT%20%2F%20Apache--2.0-a6e3a1?style=for-the-badge)](LICENSE)
 
 <br>
@@ -146,13 +146,14 @@ karakuri install --global --all -y      # Machine-wide rules and all skills
 
 ## 📚 Skill Catalog
 
-Karakuri embeds 12 modular, battle-tested skills for AI coding agents:
+Karakuri embeds 14 modular, battle-tested skills for AI coding agents:
 
 | Skill | Category | Description | Path |
 | :--- | :--- | :--- | :--- |
 | **`karakuri`** | `build-tooling` | Instructs AI agents to audit repositories (<400 LOC/file, <60 LOC/fn, 0 clippy warnings), auto-generate/sync living CODEBASE.md semantic indexes, and synchronize skills across agent runtimes. | [`skills/build-tooling/karakuri/SKILL.md`](skills/build-tooling/karakuri/SKILL.md) |
 | **`rust-clean-code`** | `build-tooling` | Enforces strict architecture, readability, and scalability for Rust: zero warning suppressions (`#[allow(...)]`), zero dead code, strict limits, role-based hierarchy, and resilient error handling. | [`skills/build-tooling/rust-clean-code/SKILL.md`](skills/build-tooling/rust-clean-code/SKILL.md) |
 | **`python-clean-code`** | `build-tooling` | Enforces modern type hints and quality tooling for Python: exclusive use of `uv`, 100% type annotations, automated `ruff` linting and formatting, zero dead code, and role-based hierarchy. | [`skills/build-tooling/python-clean-code/SKILL.md`](skills/build-tooling/python-clean-code/SKILL.md) |
+| **`rust-style-python`** | `build-tooling` | Rust/Go-style explicit error handling for Python: typed `Result[T, E]` values instead of surprise exceptions, boundary-only catches, exhaustive matching, error context, and `main` exit-code mapping. | [`skills/build-tooling/rust-style-python/SKILL.md`](skills/build-tooling/rust-style-python/SKILL.md) |
 | **`git-release-craft`** | `build-tooling` | Automates the complete Git release lifecycle: conventional commits, semantic version bumps, aesthetic release descriptions, tags, and mandatory CI/CD verification. | [`skills/build-tooling/git-release-craft/SKILL.md`](skills/build-tooling/git-release-craft/SKILL.md) |
 | **`git-repo-craft`** | `build-tooling` | Automates GitHub repository metadata auditing: minimal descriptions (<90 chars), curated discoverable topics, clean initialization, and active verification via `gh`. | [`skills/build-tooling/git-repo-craft/SKILL.md`](skills/build-tooling/git-repo-craft/SKILL.md) |
 | **`aesthetic-readme-craft`** | `build-tooling` | Crafts stunning, aesthetic READMEs following Praveensenpai's design standard: badge ribbons, ASCII architecture diagrams, alert callouts, emoji feature matrices, and 1-liner installers. | [`skills/build-tooling/aesthetic-readme-craft/SKILL.md`](skills/build-tooling/aesthetic-readme-craft/SKILL.md) |
