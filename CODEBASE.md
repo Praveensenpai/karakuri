@@ -15,9 +15,9 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
 
 ## 3. Module & Interface Skeleton
 
-### `src/cli/args.rs` (Role: cli, Lines: 202)
+### `src/cli/args.rs` (Role: cli, Lines: 253)
 - **Responsibility**: Core cli logic in src/cli/args.rs
-- **Imports**: use clap :: { Args , Parser , Subcommand } , use std :: path :: PathBuf , use crate :: domain :: { AuditOptions , InstallTarget , InstallationScope , UpdateOptions } 
+- **Imports**: use clap :: { Args , Parser , Subcommand } , use std :: path :: PathBuf , use crate :: domain :: { AuditOptions , InstallTarget , InstallationScope , SkillFilter , Stack , UpdateOptions , } 
 - **Types & Enums**:
   ```rust
   pub struct Cli
@@ -27,9 +27,11 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   pub struct DigestArgs
   pub struct SyncArgs
   pub struct UpdateArgs
+  pub struct EnsureArgs
   ```
 - **Public Functions & Signatures**:
   ```rust
+  fn resolved_filter (& self) -> SkillFilter
   fn to_domain_options (& self) -> AuditOptions
   fn to_domain_options (& self) -> UpdateOptions
   fn resolved_install_args (& self) -> InstallArgs
@@ -37,9 +39,9 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn resolved_target (& self) -> Option < InstallTarget >
   ```
 
-### `src/cli.rs` (Role: cli, Lines: 3)
+### `src/cli.rs` (Role: cli, Lines: 5)
 - **Responsibility**: Core cli logic in src/cli.rs
-- **Imports**: pub use args :: { AuditArgs , Cli , Command , DigestArgs , InstallArgs , SyncArgs , UpdateArgs } 
+- **Imports**: pub use args :: { AuditArgs , Cli , Command , DigestArgs , EnsureArgs , InstallArgs , SyncArgs , UpdateArgs , } 
 
 ### `src/domain/agent.rs` (Role: domain, Lines: 18)
 - **Responsibility**: Core domain logic in src/domain/agent.rs
@@ -109,6 +111,29 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn description (& self) -> & 'static str
   ```
 
+### `src/domain/stack.rs` (Role: domain, Lines: 197)
+- **Responsibility**: Core domain logic in src/domain/stack.rs
+- **Imports**: use std :: fmt 
+- **Types & Enums**:
+  ```rust
+  pub enum Stack
+  pub struct StackSet
+  pub enum SkillFilter
+  ```
+- **Public Functions & Signatures**:
+  ```rust
+  fn as_str (& self) -> & 'static str
+  fn parse (token : & str) -> Option < Self >
+  fn parse_list (raw : & str) -> Vec < Self >
+  fn new () -> Self
+  fn from_stacks (stacks : & [Stack]) -> Self
+  fn insert (& mut self , stack : Stack)
+  fn contains (& self , stack : Stack) -> bool
+  fn is_empty (& self) -> bool
+  fn label (& self) -> String
+  fn active_stacks (& self , detected : & StackSet) -> StackSet
+  ```
+
 ### `src/domain/sync.rs` (Role: domain, Lines: 38)
 - **Responsibility**: Core domain logic in src/domain/sync.rs
 - **Imports**: use std :: path :: PathBuf 
@@ -133,9 +158,9 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   pub enum UpdateOutcome
   ```
 
-### `src/domain.rs` (Role: domain, Lines: 14)
+### `src/domain.rs` (Role: domain, Lines: 16)
 - **Responsibility**: Core domain logic in src/domain.rs
-- **Imports**: pub use agent :: SupportedAgent , pub use audit :: AuditOptions , pub use component :: InstallTarget , pub use digest :: ModuleRole , pub use scope :: InstallationScope , pub use update :: { UpdateOptions , UpdateOutcome } 
+- **Imports**: pub use agent :: SupportedAgent , pub use audit :: AuditOptions , pub use component :: InstallTarget , pub use digest :: ModuleRole , pub use scope :: InstallationScope , pub use stack :: { SkillFilter , Stack , StackSet } , pub use update :: { UpdateOptions , UpdateOutcome } 
 
 ### `src/error.rs` (Role: general, Lines: 42)
 - **Responsibility**: Core general logic in src/error.rs
@@ -153,6 +178,14 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn run_audit (opts : & AuditOptions) -> Result < AuditReport >
   ```
 
+### `src/infra/detector.rs` (Role: infra, Lines: 133)
+- **Responsibility**: Core infra logic in src/infra/detector.rs
+- **Imports**: use std :: path :: Path , use crate :: domain :: { Stack , StackSet } 
+- **Public Functions & Signatures**:
+  ```rust
+  fn detect (dir : & Path) -> StackSet
+  ```
+
 ### `src/infra/digest_builder.rs` (Role: infra, Lines: 112)
 - **Responsibility**: Core infra logic in src/infra/digest_builder.rs
 - **Imports**: use std :: fs , use std :: path :: Path , use walkdir :: WalkDir , use crate :: domain :: digest :: { CodebaseDigest , ModuleDigest } , use crate :: error :: { KarakuriError , Result } , use crate :: infra :: rust_analyzer :: RustAnalyzer 
@@ -166,23 +199,37 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn write_to_file (dir : & Path , digest : & CodebaseDigest) -> Result < () >
   ```
 
-### `src/infra/embedded.rs` (Role: infra, Lines: 66)
+### `src/infra/embedded.rs` (Role: infra, Lines: 86)
 - **Responsibility**: Core infra logic in src/infra/embedded.rs
+- **Imports**: use crate :: domain :: Stack 
 - **Types & Enums**:
   ```rust
   pub struct SkillAsset
   ```
 
-### `src/infra/installer.rs` (Role: infra, Lines: 137)
+### `src/infra/ensure.rs` (Role: infra, Lines: 74)
+- **Responsibility**: Core infra logic in src/infra/ensure.rs
+- **Imports**: use std :: fs , use std :: path :: Path , use crate :: domain :: { SkillFilter , StackSet } , use crate :: error :: { KarakuriError , Result } , use crate :: infra :: detector , use crate :: infra :: embedded :: SkillAsset , use crate :: infra :: selector :: select_skills 
+- **Types & Enums**:
+  ```rust
+  pub struct EnsureReport
+  ```
+- **Public Functions & Signatures**:
+  ```rust
+  fn changed (& self) -> bool
+  fn ensure (path : & Path) -> Result < EnsureReport >
+  ```
+
+### `src/infra/installer.rs` (Role: infra, Lines: 143)
 - **Responsibility**: Core infra logic in src/infra/installer.rs
-- **Imports**: use std :: fs , use std :: path :: { Path , PathBuf } , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: error :: { KarakuriError , Result } , use crate :: infra :: embedded :: { AGENTS_MD , EMBEDDED_SKILLS , RULES_MD } 
+- **Imports**: use std :: fs , use std :: path :: { Path , PathBuf } , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: error :: { KarakuriError , Result } , use crate :: infra :: embedded :: { SkillAsset , AGENTS_MD , RULES_MD } 
 - **Types & Enums**:
   ```rust
   pub struct InstalledRecord
   ```
 - **Public Functions & Signatures**:
   ```rust
-  fn install (scope : InstallationScope , target : InstallTarget) -> Result < Vec < InstalledRecord > >
+  fn install (scope : InstallationScope , target : InstallTarget , skills : & [& SkillAsset] ,) -> Result < Vec < InstalledRecord > >
   ```
 
 ### `src/infra/rust_analyzer.rs` (Role: infra, Lines: 302)
@@ -196,6 +243,14 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   ```rust
   fn audit_source (path : & Path , content : & str , max_fn_lines : usize , max_nesting_depth : usize ,) -> Vec < Violation >
   fn extract_digest (path : & Path , content : & str) -> ModuleDigest
+  ```
+
+### `src/infra/selector.rs` (Role: infra, Lines: 69)
+- **Responsibility**: Core infra logic in src/infra/selector.rs
+- **Imports**: use crate :: domain :: { SkillFilter , StackSet } , use crate :: infra :: embedded :: { SkillAsset , EMBEDDED_SKILLS } 
+- **Public Functions & Signatures**:
+  ```rust
+  fn select_skills (filter : & SkillFilter , detected : & StackSet) -> Vec < & 'static SkillAsset >
   ```
 
 ### `src/infra/sync_engine.rs` (Role: infra, Lines: 132)
@@ -244,13 +299,13 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn run (opts : & UpdateOptions) -> Result < UpdateOutcome >
   ```
 
-### `src/infra.rs` (Role: infra, Lines: 13)
+### `src/infra.rs` (Role: infra, Lines: 18)
 - **Responsibility**: Core infra logic in src/infra.rs
-- **Imports**: pub use auditor :: run_audit , pub use digest_builder :: DigestBuilder , pub use installer :: install , pub use sync_engine :: SyncEngine , pub use updater :: Updater 
+- **Imports**: pub use auditor :: run_audit , pub use digest_builder :: DigestBuilder , pub use ensure :: { ensure , EnsureReport } , pub use installer :: install , pub use selector :: select_skills , pub use sync_engine :: SyncEngine , pub use updater :: Updater 
 
-### `src/main.rs` (Role: general, Lines: 124)
+### `src/main.rs` (Role: general, Lines: 161)
 - **Responsibility**: Core general logic in src/main.rs
-- **Imports**: use clap :: Parser , use colored :: Colorize , use std :: process :: exit , use cli :: { AuditArgs , Cli , Command , DigestArgs , InstallArgs , SyncArgs , UpdateArgs } , use error :: Result 
+- **Imports**: use clap :: Parser , use colored :: Colorize , use std :: path :: Path , use std :: process :: exit , use cli :: { AuditArgs , Cli , Command , DigestArgs , EnsureArgs , InstallArgs , SyncArgs , UpdateArgs } , use domain :: InstallationScope , use error :: Result 
 
 ### `src/tui/banner.rs` (Role: tui, Lines: 67)
 - **Responsibility**: Core tui logic in src/tui/banner.rs
@@ -261,12 +316,12 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn print_header_info ()
   ```
 
-### `src/tui/cards.rs` (Role: tui, Lines: 238)
+### `src/tui/cards.rs` (Role: tui, Lines: 249)
 - **Responsibility**: Core tui logic in src/tui/cards.rs
-- **Imports**: use colored :: Colorize , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: infra :: embedded :: EMBEDDED_SKILLS , use crate :: infra :: installer :: InstalledRecord 
+- **Imports**: use colored :: Colorize , use crate :: domain :: { InstallTarget , InstallationScope } , use crate :: infra :: installer :: InstalledRecord 
 - **Public Functions & Signatures**:
   ```rust
-  fn print_summary_card (scope : InstallationScope , target : InstallTarget)
+  fn print_summary_card (scope : InstallationScope , target : InstallTarget , skill_count : usize)
   fn print_security_card ()
   fn print_success_box (records : & [InstalledRecord])
   ```
@@ -282,7 +337,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn confirm_installation () -> Result < bool >
   ```
 
-### `src/tui/reports.rs` (Role: tui, Lines: 246)
+### `src/tui/reports.rs` (Role: tui, Lines: 286)
 - **Responsibility**: Core tui logic in src/tui/reports.rs
 - **Imports**: use colored :: Colorize , use std :: path :: Path , use crate :: domain :: audit :: { AuditReport , ViolationKind } , use crate :: domain :: digest :: CodebaseDigest , use crate :: domain :: sync :: { SyncReport , SyncStatus } , use crate :: domain :: UpdateOutcome 
 - **Public Functions & Signatures**:
@@ -290,12 +345,13 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn print_audit_report (report : & AuditReport)
   fn print_digest_success (digest : & CodebaseDigest , path : & Path)
   fn print_update_report (outcome : & UpdateOutcome)
+  fn print_ensure_report (report : & crate :: infra :: EnsureReport)
   fn print_sync_report (report : & SyncReport)
   ```
 
-### `src/tui.rs` (Role: tui, Lines: 11)
+### `src/tui.rs` (Role: tui, Lines: 12)
 - **Responsibility**: Core tui logic in src/tui.rs
-- **Imports**: pub use banner :: { print_banner , print_header_info } , pub use cards :: { print_security_card , print_success_box , print_summary_card } , pub use prompts :: { confirm_installation , select_scope , select_target } , pub use reports :: { print_audit_report , print_digest_success , print_sync_report , print_update_report , } 
+- **Imports**: pub use banner :: { print_banner , print_header_info } , pub use cards :: { print_security_card , print_success_box , print_summary_card } , pub use prompts :: { confirm_installation , select_scope , select_target } , pub use reports :: { print_audit_report , print_digest_success , print_ensure_report , print_sync_report , print_update_report , } 
 
 ## 4. Execution Lifecycle Trace
 1. **Startup**: Entrypoint parses CLI flags & dispatches command.

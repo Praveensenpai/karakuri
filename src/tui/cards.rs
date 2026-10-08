@@ -1,10 +1,9 @@
 use colored::Colorize;
 
 use crate::domain::{InstallTarget, InstallationScope};
-use crate::infra::embedded::EMBEDDED_SKILLS;
 use crate::infra::installer::InstalledRecord;
 
-pub fn print_summary_card(scope: InstallationScope, target: InstallTarget) {
+pub fn print_summary_card(scope: InstallationScope, target: InstallTarget, skill_count: usize) {
     let tree_v = "│".bright_black();
     let diamond = "◇".bright_cyan();
     let border = "───────────────────────────────────┐".bright_black();
@@ -24,23 +23,7 @@ pub fn print_summary_card(scope: InstallationScope, target: InstallTarget) {
                 print_project_rule_summary(&tree_v);
             }
             if target.includes_skills() {
-                println!("  {}  {}", tree_v, "│".bright_black());
-                println!(
-                    "  {}  {}  {}",
-                    tree_v,
-                    "│".bright_black(),
-                    ".agents/skills/*".bright_cyan()
-                );
-                println!(
-                    "  {}  {}    {}",
-                    tree_v,
-                    "│".bright_black(),
-                    format!(
-                        "target ➔ Project-wide Modular Skills ({} skills)",
-                        EMBEDDED_SKILLS.len()
-                    )
-                    .bright_black()
-                );
+                print_project_skill_summary(&tree_v, skill_count);
             }
         }
         InstallationScope::Global => {
@@ -48,25 +31,53 @@ pub fn print_summary_card(scope: InstallationScope, target: InstallTarget) {
                 print_global_rule_summary(&tree_v);
             }
             if target.includes_skills() {
-                println!("  {}  {}", tree_v, "│".bright_black());
-                println!(
-                    "  {}  {}  {}",
-                    tree_v,
-                    "│".bright_black(),
-                    "~/.gemini/config/skills/* & ~/.agents/skills/*".bright_cyan()
-                );
-                println!(
-                    "  {}  {}    {}",
-                    tree_v,
-                    "│".bright_black(),
-                    "target ➔ Machine-wide Modular Skills".bright_black()
-                );
+                print_global_skill_summary(&tree_v, skill_count);
             }
         }
     }
 
     println!("  {}  {}", tree_v, "│".bright_black());
     println!("  {}  {}", tree_v, bottom);
+}
+
+fn print_project_skill_summary(tree_v: &colored::ColoredString, skill_count: usize) {
+    println!("  {}  {}", tree_v, "│".bright_black());
+    println!(
+        "  {}  {}  {}",
+        tree_v,
+        "│".bright_black(),
+        ".agents/skills/*".bright_cyan()
+    );
+    println!(
+        "  {}  {}    {}",
+        tree_v,
+        "│".bright_black(),
+        format!(
+            "target ➔ Project-wide Modular Skills ({} skills)",
+            skill_count
+        )
+        .bright_black()
+    );
+}
+
+fn print_global_skill_summary(tree_v: &colored::ColoredString, skill_count: usize) {
+    println!("  {}  {}", tree_v, "│".bright_black());
+    println!(
+        "  {}  {}  {}",
+        tree_v,
+        "│".bright_black(),
+        "~/.gemini/config/skills/* & ~/.agents/skills/*".bright_cyan()
+    );
+    println!(
+        "  {}  {}    {}",
+        tree_v,
+        "│".bright_black(),
+        format!(
+            "target ➔ Machine-wide Modular Skills ({} skills)",
+            skill_count
+        )
+        .bright_black()
+    );
 }
 
 fn print_project_rule_summary(tree_v: &colored::ColoredString) {

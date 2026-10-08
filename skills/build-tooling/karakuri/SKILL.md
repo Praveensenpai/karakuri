@@ -2,8 +2,9 @@
 name: karakuri
 description: >-
   Audits repositories against clean-code limits (<400 LOC/file, <60 LOC/fn, nesting <=3, 0 clippy warnings),
-  auto-generates/synchronizes schema-compliant CODEBASE.md living indexes, and syncs custom skills across
-  AI agent environments (~/.gemini, ~/.agents, ~/.claude, ~/.codex) using the native karakuri CLI.
+  auto-generates/synchronizes schema-compliant CODEBASE.md living indexes, detects the project stack to install
+  only matching language skills, and syncs custom skills across AI agent environments (~/.gemini, ~/.agents,
+  ~/.claude, ~/.codex) using the native karakuri CLI.
 ---
 
 # `karakuri` Skill: AI Codebase & Skill Repository Orchestrator
@@ -86,9 +87,34 @@ karakuri install --project --rules -y
 # Install rules and all modular skills into current project
 karakuri install --project --all -y
 
+# Stack-aware: install generic + only matching language skills (rust, python, mobile, shell)
+karakuri install --project --auto -y
+
+# Stack-aware with an explicit override
+karakuri install --project --skills --stack rust,python -y
+
 # Install globally across all agent home directories
 karakuri install --global --rules -y
 ```
+
+### 2.5 Stack-Aware Skill Ensure (`karakuri ensure`)
+Detects the project stack and reconciles `<project>/.agents/skills` so only the matching skills are present. Idempotent: a second run writes nothing:
+
+```bash
+# Ensure the current project has exactly the skills its stack needs
+karakuri ensure .
+
+# Ensure an external project
+karakuri ensure /path/to/project
+```
+
+Detection markers (shallow, root-level):
+- **Rust**: `Cargo.toml` or a top-level `*.rs` file.
+- **Python**: `pyproject.toml`, `requirements.txt`, `uv.lock`, `setup.py`, `Pipfile`, or a top-level `*.py` file.
+- **Mobile**: `build.gradle(.kts)`, `settings.gradle.kts`, `AndroidManifest.xml`, or a top-level `*.kt` file.
+- **Shell**: `Makefile`, `makefile`, or a top-level `*.sh` file.
+
+Generic guardrails are always included. Python projects receive both `python-clean-code` and `rust-style-python`.
 
 ---
 
@@ -109,3 +135,10 @@ At the end of any iteration touching source code:
 1. Run `karakuri digest .`.
 2. Verify that `CODEBASE.md` is updated with new modules and signatures.
 3. Commit `CODEBASE.md` alongside code changes in the same atomic commit.
+
+### Workflow C: Project Entry Bootstrap
+On first entering a repository:
+1. Run `karakuri ensure .`.
+2. Read the detected stacks and matched skills from the terminal output.
+3. If the detection is wrong, override it with `karakuri install --project --skills --stack <list> -y`.
+4. Run `karakuri ensure .` again after switching branches that change the stack.

@@ -214,6 +214,46 @@ pub fn print_update_report(outcome: &UpdateOutcome) {
         }
     }
 }
+/// Prints the outcome of a stack-aware `ensure` reconciliation.
+pub fn print_ensure_report(report: &crate::infra::EnsureReport) {
+    println!(
+        "\n  {}",
+        "─── Stack-Aware Skill Ensure ───".bright_cyan().bold()
+    );
+    println!(
+        "  Detected Stacks: {}   Matched Skills: {}\n",
+        report.stacks.label().bright_yellow(),
+        report.selected.len().to_string().bright_yellow()
+    );
+
+    for name in &report.written {
+        println!(
+            "  {} {} {} ──> {}",
+            "[INSTALLED]".bright_green(),
+            "✔".bright_green().bold(),
+            name.bright_cyan(),
+            ".agents/skills/".bright_black()
+        );
+    }
+    for name in &report.up_to_date {
+        println!("  {} {}", "[OK]".bright_black(), name.bright_white());
+    }
+
+    if report.changed() {
+        println!(
+            "\n  {} {}\n",
+            "✔".bright_green().bold(),
+            "Project skills reconciled to the detected stack.".bright_green()
+        );
+    } else {
+        println!(
+            "\n  {} {}\n",
+            "✔".bright_green().bold(),
+            "All matching skills already up to date.".bright_green()
+        );
+    }
+}
+
 pub fn print_sync_report(report: &SyncReport) {
     println!(
         "\n  {}",

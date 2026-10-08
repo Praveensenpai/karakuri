@@ -15,6 +15,8 @@ Never edit any code files or execute destructive modifications without first exp
   Never assume code works without active verification. Before declaring any coding task, bug fix, or refactor complete, the agent MUST actively execute the 3-phase verification cycle (`skills/build-tooling/systematic-code-verification/`): static validation/compilation, test suite execution, and live runtime smoke testing. The agent must provide verifiable terminal output proving the fix works. Never say "it should work" or ask the user to test what the agent can test itself.
 - **Autonomous Release & CI/CD Self-Healing (Zero Permission-Seeking)**:
   Once a release is initiated or approved, the agent is 100% responsible for delivering a verified green pipeline. If GitHub Actions, compilation, or release workflows fail due to an error introduced during release/build, the agent MUST autonomously diagnose (`gh run view --log-failed`), fix the error, re-test, re-tag/re-push, and monitor until green.
+- **Stack-Aware Skill Bootstrap (Project Entry)**:
+  On first entering a project, run `karakuri ensure .` to install the generic guardrails plus only the language skills matching the detected stack (Rust, Python, Mobile, Shell). It is idempotent and safe to re-run at any time; never hand-copy skills between projects.
 
 ---
 

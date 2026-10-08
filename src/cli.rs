@@ -1,3 +1,5 @@
 pub mod args;
 
-pub use args::{AuditArgs, Cli, Command, DigestArgs, InstallArgs, SyncArgs, UpdateArgs};
+pub use args::{
+    AuditArgs, Cli, Command, DigestArgs, EnsureArgs, InstallArgs, SyncArgs, UpdateArgs,
+};

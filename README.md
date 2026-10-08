@@ -1,6 +1,6 @@
 # 🌸 からくり (karakuri) — AI Codebase & Skill Repository Orchestrator
 
-> **High-performance AI codebase auditor, automated `CODEBASE.md` AST generator, and multi-agent skill synchronizer.**
+> **High-performance AI codebase auditor, stack-aware skill orchestrator, automated `CODEBASE.md` AST generator, and multi-agent skill synchronizer.**
 
 [![Latest Release](https://img.shields.io/github/v/release/Praveensenpai/karakuri?style=for-the-badge&color=89b4fa)](https://github.com/Praveensenpai/karakuri/releases)
 [![Rust Edition](https://img.shields.io/badge/Rust-2021%20Edition-DEA584?style=for-the-badge&logo=rust)](Cargo.toml)
@@ -64,6 +64,7 @@
 | :--- | :--- |
 | **🔍 Strict Codebase Auditor** | Recursively audits codebases against hard limits: `<400` LOC/file, `<60` LOC/function, max nesting depth `<=3`, and flags forbidden suppressions (`#[allow(dead_code)]`). |
 | **📑 Living Semantic Digest** | AST-parses codebases (via `syn`) to extract module roles, public structs, enums, and exact function signatures into a high-density, AI-first `CODEBASE.md`. |
+| **🧩 Stack-Aware Skill Selection** | Detects the project stack (Rust, Python, Mobile, Shell) and installs only the generic guardrails plus the matching language skills, so agents never carry skills a project does not need. |
 | **🔄 Cross-Agent Skill Sync** | Automatically detects and synchronizes custom agent skills across multiple local runtimes (`~/.gemini`, `~/.agents`, `~/.claude`, `~/.codex`). |
 | **🛡️ Behavioral Guardrails** | Embeds and installs standard behavioral contracts (Mandatory Explicit Approval, 3-phase systematic code verification, unslop prose hygiene). |
 | **🎮 Interactive TUI Wizard** | Standalone keyboard-driven terminal menu (`↑`/`↓`, `Enter`) for selecting install scopes (global vs project) and components. |
@@ -137,11 +138,15 @@ Launches the interactive TUI wizard or installs rules and skills headlessly:
 karakuri
 
 # Headless installation flags
-karakuri install --project --rules -y   # Current project only (committed with repo)
-karakuri install --project --all -y     # Current project with all skills
-karakuri install --global --rules -y    # Machine-wide across ~/.gemini, ~/.agents
-karakuri install --global --all -y      # Machine-wide rules and all skills
+karakuri install --project --rules -y          # Current project only (committed with repo)
+karakuri install --project --all -y            # Current project with all skills
+karakuri install --project --auto -y           # Stack-aware: generic + matching language skills
+karakuri install --project --skills --stack rust,python -y   # Explicit stack override
+karakuri install --global --rules -y           # Machine-wide across ~/.gemini, ~/.agents
+karakuri install --global --all -y             # Machine-wide rules and all skills
 ```
+
+Without `--all` or `--stack`, skill selection is stack-aware by default: karakuri detects the current project's stack and installs only the generic guardrails plus the matching language skills.
 
 ### 5. `karakuri update [FLAGS]`
 Self-updates the running binary by fetching the latest GitHub release, verifying its SHA-256 checksum, and replacing the executable in place:
@@ -158,6 +163,34 @@ karakuri update --force
 ```
 
 Falls back to `cargo install --git` when no prebuilt asset matches the host. Also mirrors the refreshed binary into writable `~/.local/bin` and `~/.cargo/bin` copies, matching `install.sh`.
+
+### 6. `karakuri ensure [PATH]`
+Detects the project stack and reconciles `<project>/.agents/skills` so exactly the matching skills are present. Idempotent — a second run writes nothing:
+
+```bash
+# Ensure the current project has exactly the skills its stack needs
+karakuri ensure .
+
+# Ensure an external project
+karakuri ensure /path/to/project
+```
+
+Stack detection is shallow and root-level:
+
+```text
+┌──────────────────────────────────────────────────────────────────────┐
+│                      🧩 Stack Detection Rules                        │
+├───────────┬──────────────────────────────────────────────────────────┤
+│  Rust     │  Cargo.toml · *.rs                                       │
+│  Python   │  pyproject.toml · requirements.txt · uv.lock · *.py      │
+│  Mobile   │  build.gradle(.kts) · settings.gradle.kts · *.kt         │
+│  Shell    │  Makefile · makefile · *.sh                              │
+└───────────┴──────────────────────────────────────────────────────────┘
+        ▼
+   Generic guardrails (always) + matching language skills only
+```
+
+Generic guardrails are always included. Python projects receive both `python-clean-code` and `rust-style-python`.
 
 ---
 

@@ -1,7 +1,9 @@
 use clap::{Args, Parser, Subcommand};
 use std::path::PathBuf;
 
-use crate::domain::{AuditOptions, InstallTarget, InstallationScope, UpdateOptions};
+use crate::domain::{
+    AuditOptions, InstallTarget, InstallationScope, SkillFilter, Stack, UpdateOptions,
+};
 
 #[derive(Parser, Debug)]
 #[command(
@@ -35,6 +37,14 @@ pub struct Cli {
     #[arg(short = 'a', long = "all")]
     pub all: bool,
 
+    /// Detect the project stack and install only matching skills
+    #[arg(long)]
+    pub auto: bool,
+
+    /// Explicit stacks to install for (comma-separated: rust, python, mobile, shell)
+    #[arg(long, value_name = "STACKS")]
+    pub stack: Option<String>,
+
     /// Skip confirmation prompt
     #[arg(short = 'y', long = "yes")]
     pub yes: bool,
@@ -52,6 +62,8 @@ pub enum Command {
     Sync(SyncArgs),
     /// Fetch and install the latest release binary
     Update(UpdateArgs),
+    /// Detect the project stack and install only the matching skills
+    Ensure(EnsureArgs),
 }
 
 #[derive(Args, Debug, Default, Clone)]
@@ -76,9 +88,39 @@ pub struct InstallArgs {
     #[arg(short = 'a', long = "all")]
     pub all: bool,
 
+    /// Detect the project stack and install only matching skills
+    #[arg(long)]
+    pub auto: bool,
+
+    /// Explicit stacks to install for (comma-separated: rust, python, mobile, shell)
+    #[arg(long, value_name = "STACKS")]
+    pub stack: Option<String>,
+
     /// Skip confirmation prompt
     #[arg(short = 'y', long = "yes")]
     pub yes: bool,
+}
+
+impl InstallArgs {
+    /// Resolves which skills an install pass should select.
+    ///
+    /// `--all` installs everything, `--stack` restricts to explicit stacks,
+    /// and the default (also `--auto`) detects the current project's stacks.
+    pub fn resolved_filter(&self) -> SkillFilter {
+        if self.all {
+            return SkillFilter::All;
+        }
+        if let Some(raw) = self.stack.as_deref() {
+            let stacks = Stack::parse_list(raw);
+            if !stacks.is_empty() {
+                return SkillFilter::Explicit(stacks);
+            }
+        }
+        if self.auto {
+            return SkillFilter::Auto;
+        }
+        SkillFilter::Auto
+    }
 }
 
 #[derive(Args, Debug, Clone)]
@@ -164,6 +206,13 @@ impl UpdateArgs {
     }
 }
 
+#[derive(Args, Debug, Default, Clone)]
+pub struct EnsureArgs {
+    /// Target project directory (defaults to current directory)
+    #[arg(default_value = ".")]
+    pub path: PathBuf,
+}
+
 impl Cli {
     pub fn resolved_install_args(&self) -> InstallArgs {
         InstallArgs {
@@ -172,6 +221,8 @@ impl Cli {
             rules: self.rules,
             skills: self.skills,
             all: self.all,
+            auto: self.auto,
+            stack: self.stack.clone(),
             yes: self.yes,
         }
     }
@@ -191,7 +242,7 @@ impl InstallArgs {
     pub fn resolved_target(&self) -> Option<InstallTarget> {
         if self.all {
             Some(InstallTarget::All)
-        } else if self.skills {
+        } else if self.skills || self.auto || self.stack.is_some() {
             Some(InstallTarget::Skills)
         } else if self.rules {
             Some(InstallTarget::Rules)
