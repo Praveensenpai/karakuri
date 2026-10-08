@@ -19,7 +19,13 @@ pub enum UpdateOutcome {
         from: String,
         to: String,
         path: PathBuf,
+        /// Whether the freshly installed binary re-extracted embedded skills.
+        skills_refreshed: bool,
     },
     /// No prebuilt asset matched; fell back to `cargo install --git`.
-    BuiltFromSource { to: String },
+    BuiltFromSource {
+        to: String,
+        /// Whether the freshly installed binary re-extracted embedded skills.
+        skills_refreshed: bool,
+    },
 }

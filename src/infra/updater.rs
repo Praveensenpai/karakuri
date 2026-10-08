@@ -2,6 +2,7 @@ use crate::domain::{UpdateOptions, UpdateOutcome};
 use crate::error::{KarakuriError, Result};
 
 mod asset;
+mod refresh;
 mod replace;
 
 use replace::replace_binary;
@@ -28,10 +29,12 @@ impl Updater {
         match replace_binary(&target, &binary) {
             Ok(()) => {
                 replace::sync_secondaries(&target);
+                let skills_refreshed = refresh::refresh_skills().is_ok();
                 Ok(UpdateOutcome::Updated {
                     from: current,
                     to: latest,
                     path: target,
+                    skills_refreshed,
                 })
             }
             Err(err) if is_permission_denied(&err) => build_from_source(latest),
@@ -61,7 +64,11 @@ fn build_from_source(latest: String) -> Result<UpdateOutcome> {
 
     if status.success() {
         sync_cargo_install();
-        Ok(UpdateOutcome::BuiltFromSource { to: latest })
+        let skills_refreshed = refresh::refresh_skills().is_ok();
+        Ok(UpdateOutcome::BuiltFromSource {
+            to: latest,
+            skills_refreshed,
+        })
     } else {
         Err(KarakuriError::UnsupportedPlatform {
             arch: std::env::consts::ARCH.to_string(),

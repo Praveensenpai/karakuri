@@ -162,6 +162,8 @@ karakuri update
 karakuri update --force
 ```
 
+After replacing the binary, `update` re-extracts the new release's embedded skills into the global agent directories and fans them out with `sync`, so the installed skill docs always track the binary. Set `KARAKURI_SKIP_REFRESH=1` to skip that step. A failed refresh never fails the update itself; the report flags it so you can run `karakuri install --global --all -y` and `karakuri sync` manually.
+
 Falls back to `cargo install --git` when no prebuilt asset matches the host. Also mirrors the refreshed binary into writable `~/.local/bin` and `~/.cargo/bin` copies, matching `install.sh`.
 
 ### 6. `karakuri ensure [PATH]`

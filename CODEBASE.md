@@ -149,7 +149,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn new (name : & 'static str , skills_dir : PathBuf) -> Self
   ```
 
-### `src/domain/update.rs` (Role: domain, Lines: 25)
+### `src/domain/update.rs` (Role: domain, Lines: 31)
 - **Responsibility**: Core domain logic in src/domain/update.rs
 - **Imports**: use std :: path :: PathBuf 
 - **Types & Enums**:
@@ -162,7 +162,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
 - **Responsibility**: Core domain logic in src/domain.rs
 - **Imports**: pub use agent :: SupportedAgent , pub use audit :: AuditOptions , pub use component :: InstallTarget , pub use digest :: ModuleRole , pub use scope :: InstallationScope , pub use stack :: { SkillFilter , Stack , StackSet } , pub use update :: { UpdateOptions , UpdateOutcome } 
 
-### `src/error.rs` (Role: general, Lines: 42)
+### `src/error.rs` (Role: general, Lines: 45)
 - **Responsibility**: Core general logic in src/error.rs
 - **Imports**: use std :: path :: PathBuf , use thiserror :: Error 
 - **Types & Enums**:
@@ -277,6 +277,14 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn check_checksum (artifact : & str , expected : & str , archive : & [u8]) -> Result < () >
   ```
 
+### `src/infra/updater/refresh.rs` (Role: infra, Lines: 53)
+- **Responsibility**: Core infra logic in src/infra/updater/refresh.rs
+- **Imports**: use std :: path :: Path , use std :: process :: Command , use crate :: error :: { KarakuriError , Result } 
+- **Public Functions & Signatures**:
+  ```rust
+  fn refresh_skills () -> Result < () >
+  ```
+
 ### `src/infra/updater/replace.rs` (Role: infra, Lines: 168)
 - **Responsibility**: Core infra logic in src/infra/updater/replace.rs
 - **Imports**: use std :: fs , use std :: io :: Cursor , use std :: os :: unix :: fs :: PermissionsExt , use std :: path :: { Path , PathBuf } , use crate :: error :: { KarakuriError , Result } 
@@ -287,7 +295,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn sync_secondaries (primary : & Path)
   ```
 
-### `src/infra/updater.rs` (Role: infra, Lines: 88)
+### `src/infra/updater.rs` (Role: infra, Lines: 95)
 - **Responsibility**: Core infra logic in src/infra/updater.rs
 - **Imports**: use crate :: domain :: { UpdateOptions , UpdateOutcome } , use crate :: error :: { KarakuriError , Result } , use replace :: replace_binary 
 - **Types & Enums**:
@@ -337,7 +345,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn confirm_installation () -> Result < bool >
   ```
 
-### `src/tui/reports.rs` (Role: tui, Lines: 286)
+### `src/tui/reports.rs` (Role: tui, Lines: 315)
 - **Responsibility**: Core tui logic in src/tui/reports.rs
 - **Imports**: use colored :: Colorize , use std :: path :: Path , use crate :: domain :: audit :: { AuditReport , ViolationKind } , use crate :: domain :: digest :: CodebaseDigest , use crate :: domain :: sync :: { SyncReport , SyncStatus } , use crate :: domain :: UpdateOutcome 
 - **Public Functions & Signatures**:

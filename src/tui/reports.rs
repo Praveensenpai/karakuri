@@ -195,17 +195,27 @@ pub fn print_update_report(outcome: &UpdateOutcome) {
                     .bright_yellow()
             );
         }
-        UpdateOutcome::Updated { from, to, path } => {
+        UpdateOutcome::Updated {
+            from,
+            to,
+            path,
+            skills_refreshed,
+        } => {
             println!("  {} → {}", from.bright_white(), to.bright_green().bold());
             println!("  Path: {}", path.display().to_string().bright_cyan());
+            print_refresh_note(*skills_refreshed);
             println!(
                 "\n  {} {}\n",
                 "✔".bright_green().bold(),
                 "Karakuri updated successfully.".bright_green().bold()
             );
         }
-        UpdateOutcome::BuiltFromSource { to } => {
+        UpdateOutcome::BuiltFromSource {
+            to,
+            skills_refreshed,
+        } => {
             println!("  Installed: {}", to.bright_green().bold());
+            print_refresh_note(*skills_refreshed);
             println!(
                 "\n  {} {}\n",
                 "✔".bright_green().bold(),
@@ -214,6 +224,25 @@ pub fn print_update_report(outcome: &UpdateOutcome) {
         }
     }
 }
+
+/// Prints whether the post-update skill re-extraction succeeded.
+fn print_refresh_note(refreshed: bool) {
+    if refreshed {
+        println!(
+            "  {} {}",
+            "↻".bright_cyan().bold(),
+            "Embedded skills re-extracted and synced across agents.".bright_cyan()
+        );
+    } else {
+        println!(
+            "  {} {}",
+            "!".bright_yellow().bold(),
+            "Binary updated, but skill refresh failed. Run `karakuri install --global --all -y` then `karakuri sync`."
+                .bright_yellow()
+        );
+    }
+}
+
 /// Prints the outcome of a stack-aware `ensure` reconciliation.
 pub fn print_ensure_report(report: &crate::infra::EnsureReport) {
     println!(

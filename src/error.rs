@@ -37,6 +37,9 @@ pub enum KarakuriError {
 
     #[error("Architecture {arch} on {os} has no prebuilt asset and cargo is unavailable")]
     UnsupportedPlatform { arch: String, os: String },
+
+    #[error("Failed to refresh installed skills: {0}")]
+    SkillRefresh(String),
 }
 
 pub type Result<T> = std::result::Result<T, KarakuriError>;
