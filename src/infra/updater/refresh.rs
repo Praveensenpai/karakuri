@@ -1,6 +1,7 @@
 use std::path::Path;
 use std::process::Command;
 
+use crate::domain::SkillRefresh;
 use crate::error::{KarakuriError, Result};
 
 /// Re-extracts the updated binary's embedded skills into the global agent
@@ -12,12 +13,21 @@ use crate::error::{KarakuriError, Result};
 /// old executable is unlinked, `current_exe()` no longer resolves to a
 /// spawnable file.
 ///
-/// Set `KARAKURI_SKIP_REFRESH=1` to opt out.
-pub fn refresh_skills(binary: &Path) -> Result<()> {
+/// Set `KARAKURI_SKIP_REFRESH=1` to opt out. The returned status separates
+/// a real refresh from an intentional skip and from a failure, so callers
+/// never report success for work that did not happen.
+pub fn refresh_skills(binary: &Path) -> SkillRefresh {
     if std::env::var_os("KARAKURI_SKIP_REFRESH").is_some() {
-        return Ok(());
+        return SkillRefresh::Skipped;
     }
 
+    match refresh(binary) {
+        Ok(()) => SkillRefresh::Refreshed,
+        Err(_) => SkillRefresh::Failed,
+    }
+}
+
+fn refresh(binary: &Path) -> Result<()> {
     run(binary, &["install", "--global", "--all", "-y"])?;
     run(binary, &["sync"])?;
     Ok(())
@@ -56,14 +66,22 @@ mod tests {
     }
 
     #[test]
-    fn run_succeeds_for_a_real_binary() {
+    fn refresh_skills_reports_refreshed_and_skipped() {
         let dir = std::env::temp_dir().join(format!("kara-refresh-{}", std::process::id()));
         fs::create_dir_all(&dir).expect("create temp dir");
         let script = dir.join("fake-karakuri");
         fs::write(&script, b"#!/bin/sh\nexit 0\n").expect("write script");
         fs::set_permissions(&script, fs::Permissions::from_mode(0o755)).expect("chmod script");
 
-        run(&script, &["sync"]).expect("real executable must succeed");
+        std::env::remove_var("KARAKURI_SKIP_REFRESH");
+        assert_eq!(refresh_skills(&script), SkillRefresh::Refreshed);
+
+        std::env::set_var("KARAKURI_SKIP_REFRESH", "1");
+        assert_eq!(
+            refresh_skills(Path::new("/nonexistent/karakuri-xyz")),
+            SkillRefresh::Skipped
+        );
+        std::env::remove_var("KARAKURI_SKIP_REFRESH");
 
         let _ = fs::remove_dir_all(&dir);
     }

@@ -29,12 +29,12 @@ impl Updater {
         match replace_binary(&target, &binary) {
             Ok(()) => {
                 replace::sync_secondaries(&target);
-                let skills_refreshed = refresh::refresh_skills(&target).is_ok();
+                let refresh = refresh::refresh_skills(&target);
                 Ok(UpdateOutcome::Updated {
                     from: current,
                     to: latest,
                     path: target,
-                    skills_refreshed,
+                    refresh,
                 })
             }
             Err(err) if is_permission_denied(&err) => build_from_source(latest, &target),
@@ -64,10 +64,10 @@ fn build_from_source(latest: String, target: &std::path::Path) -> Result<UpdateO
 
     if status.success() {
         sync_cargo_install(target);
-        let skills_refreshed = refresh::refresh_skills(target).is_ok();
+        let refresh = refresh::refresh_skills(target);
         Ok(UpdateOutcome::BuiltFromSource {
             to: latest,
-            skills_refreshed,
+            refresh,
         })
     } else {
         Err(KarakuriError::UnsupportedPlatform {

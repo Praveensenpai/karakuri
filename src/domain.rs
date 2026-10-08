@@ -13,4 +13,4 @@ pub use component::InstallTarget;
 pub use digest::ModuleRole;
 pub use scope::InstallationScope;
 pub use stack::{SkillFilter, Stack, StackSet};
-pub use update::{UpdateOptions, UpdateOutcome};
+pub use update::{SkillRefresh, UpdateOptions, UpdateOutcome};

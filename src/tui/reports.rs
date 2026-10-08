@@ -4,7 +4,7 @@ use std::path::Path;
 use crate::domain::audit::{AuditReport, ViolationKind};
 use crate::domain::digest::CodebaseDigest;
 use crate::domain::sync::{SyncReport, SyncStatus};
-use crate::domain::UpdateOutcome;
+use crate::domain::{SkillRefresh, UpdateOutcome};
 
 /// Prints a colorized, aesthetic audit report.
 pub fn print_audit_report(report: &AuditReport) {
@@ -199,23 +199,20 @@ pub fn print_update_report(outcome: &UpdateOutcome) {
             from,
             to,
             path,
-            skills_refreshed,
+            refresh,
         } => {
             println!("  {} → {}", from.bright_white(), to.bright_green().bold());
             println!("  Path: {}", path.display().to_string().bright_cyan());
-            print_refresh_note(*skills_refreshed);
+            print_refresh_note(*refresh);
             println!(
                 "\n  {} {}\n",
                 "✔".bright_green().bold(),
                 "Karakuri updated successfully.".bright_green().bold()
             );
         }
-        UpdateOutcome::BuiltFromSource {
-            to,
-            skills_refreshed,
-        } => {
+        UpdateOutcome::BuiltFromSource { to, refresh } => {
             println!("  Installed: {}", to.bright_green().bold());
-            print_refresh_note(*skills_refreshed);
+            print_refresh_note(*refresh);
             println!(
                 "\n  {} {}\n",
                 "✔".bright_green().bold(),
@@ -225,21 +222,25 @@ pub fn print_update_report(outcome: &UpdateOutcome) {
     }
 }
 
-/// Prints whether the post-update skill re-extraction succeeded.
-fn print_refresh_note(refreshed: bool) {
-    if refreshed {
-        println!(
+/// Prints the outcome of the post-update skill re-extraction step.
+fn print_refresh_note(refresh: SkillRefresh) {
+    match refresh {
+        SkillRefresh::Refreshed => println!(
             "  {} {}",
             "↻".bright_cyan().bold(),
             "Embedded skills re-extracted and synced across agents.".bright_cyan()
-        );
-    } else {
-        println!(
+        ),
+        SkillRefresh::Skipped => println!(
+            "  {} {}",
+            "–".bright_black().bold(),
+            "Skill refresh skipped (KARAKURI_SKIP_REFRESH set).".bright_black()
+        ),
+        SkillRefresh::Failed => println!(
             "  {} {}",
             "!".bright_yellow().bold(),
             "Binary updated, but skill refresh failed. Run `karakuri install --global --all -y` then `karakuri sync`."
                 .bright_yellow()
-        );
+        ),
     }
 }
 
