@@ -14,8 +14,7 @@ pub fn refresh_skills() -> Result<()> {
         return Ok(());
     }
 
-    let binary =
-        std::env::current_exe().map_err(|e| KarakuriError::CurrentExe(e.to_string()))?;
+    let binary = std::env::current_exe().map_err(|e| KarakuriError::CurrentExe(e.to_string()))?;
     run(&binary, &["install", "--global", "--all", "-y"])?;
     run(&binary, &["sync"])?;
     Ok(())
