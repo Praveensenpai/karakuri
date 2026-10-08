@@ -277,12 +277,12 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn check_checksum (artifact : & str , expected : & str , archive : & [u8]) -> Result < () >
   ```
 
-### `src/infra/updater/refresh.rs` (Role: infra, Lines: 53)
+### `src/infra/updater/refresh.rs` (Role: infra, Lines: 70)
 - **Responsibility**: Core infra logic in src/infra/updater/refresh.rs
 - **Imports**: use std :: path :: Path , use std :: process :: Command , use crate :: error :: { KarakuriError , Result } 
 - **Public Functions & Signatures**:
   ```rust
-  fn refresh_skills () -> Result < () >
+  fn refresh_skills (binary : & Path) -> Result < () >
   ```
 
 ### `src/infra/updater/replace.rs` (Role: infra, Lines: 168)

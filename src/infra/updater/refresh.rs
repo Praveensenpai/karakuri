@@ -8,15 +8,18 @@ use crate::error::{KarakuriError, Result};
 ///
 /// The running process still holds the *previous* embedded assets, so this
 /// shells out to the freshly replaced binary instead of writing in-process.
+/// `binary` must be the path captured *before* the replacement: after the
+/// old executable is unlinked, `current_exe()` no longer resolves to a
+/// spawnable file.
+///
 /// Set `KARAKURI_SKIP_REFRESH=1` to opt out.
-pub fn refresh_skills() -> Result<()> {
+pub fn refresh_skills(binary: &Path) -> Result<()> {
     if std::env::var_os("KARAKURI_SKIP_REFRESH").is_some() {
         return Ok(());
     }
 
-    let binary = std::env::current_exe().map_err(|e| KarakuriError::CurrentExe(e.to_string()))?;
-    run(&binary, &["install", "--global", "--all", "-y"])?;
-    run(&binary, &["sync"])?;
+    run(binary, &["install", "--global", "--all", "-y"])?;
+    run(binary, &["sync"])?;
     Ok(())
 }
 
@@ -42,11 +45,26 @@ fn run(binary: &Path, args: &[&str]) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::fs;
+    use std::os::unix::fs::PermissionsExt;
 
     #[test]
     fn run_reports_missing_binary() {
         let err = run(Path::new("/nonexistent/karakuri-xyz"), &["sync"])
             .expect_err("missing binary must fail");
         assert!(matches!(err, KarakuriError::SkillRefresh(_)));
+    }
+
+    #[test]
+    fn run_succeeds_for_a_real_binary() {
+        let dir = std::env::temp_dir().join(format!("kara-refresh-{}", std::process::id()));
+        fs::create_dir_all(&dir).expect("create temp dir");
+        let script = dir.join("fake-karakuri");
+        fs::write(&script, b"#!/bin/sh\nexit 0\n").expect("write script");
+        fs::set_permissions(&script, fs::Permissions::from_mode(0o755)).expect("chmod script");
+
+        run(&script, &["sync"]).expect("real executable must succeed");
+
+        let _ = fs::remove_dir_all(&dir);
     }
 }

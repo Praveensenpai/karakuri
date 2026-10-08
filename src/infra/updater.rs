@@ -29,7 +29,7 @@ impl Updater {
         match replace_binary(&target, &binary) {
             Ok(()) => {
                 replace::sync_secondaries(&target);
-                let skills_refreshed = refresh::refresh_skills().is_ok();
+                let skills_refreshed = refresh::refresh_skills(&target).is_ok();
                 Ok(UpdateOutcome::Updated {
                     from: current,
                     to: latest,
@@ -37,7 +37,7 @@ impl Updater {
                     skills_refreshed,
                 })
             }
-            Err(err) if is_permission_denied(&err) => build_from_source(latest),
+            Err(err) if is_permission_denied(&err) => build_from_source(latest, &target),
             Err(err) => Err(err),
         }
     }
@@ -50,7 +50,7 @@ fn download_binary(tag: &str) -> Result<Vec<u8>> {
     replace::extract_binary(&name, &archive)
 }
 
-fn build_from_source(latest: String) -> Result<UpdateOutcome> {
+fn build_from_source(latest: String, target: &std::path::Path) -> Result<UpdateOutcome> {
     let status = std::process::Command::new("cargo")
         .args([
             "install",
@@ -63,8 +63,8 @@ fn build_from_source(latest: String) -> Result<UpdateOutcome> {
         .map_err(|e| KarakuriError::CurrentExe(e.to_string()))?;
 
     if status.success() {
-        sync_cargo_install();
-        let skills_refreshed = refresh::refresh_skills().is_ok();
+        sync_cargo_install(target);
+        let skills_refreshed = refresh::refresh_skills(target).is_ok();
         Ok(UpdateOutcome::BuiltFromSource {
             to: latest,
             skills_refreshed,
@@ -77,11 +77,11 @@ fn build_from_source(latest: String) -> Result<UpdateOutcome> {
     }
 }
 
-fn sync_cargo_install() {
-    if let (Some(home), Ok(current)) = (dirs::home_dir(), std::env::current_exe()) {
+fn sync_cargo_install(target: &std::path::Path) {
+    if let Some(home) = dirs::home_dir() {
         let installed = home.join(".cargo/bin/karakuri");
-        if installed.is_file() && installed != current {
-            let _ = std::fs::copy(&installed, &current);
+        if installed.is_file() && installed != target {
+            let _ = std::fs::copy(&installed, target);
         }
     }
 }
