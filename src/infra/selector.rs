@@ -49,6 +49,9 @@ mod tests {
 
         assert!(!names.contains(&"tayori"));
         assert!(!names.contains(&"kuroko"));
+        assert!(!names.contains(&"cli-builder"));
+        assert!(!names.contains(&"frontend-design"));
+        assert!(!names.contains(&"web-design-guidelines"));
     }
 
     #[test]

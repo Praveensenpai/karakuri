@@ -77,3 +77,7 @@ Before writing, modifying, or refactoring code in any specific language or frame
   - Use `karakuri sync` to ensure cross-agent skill parity.
 - **Telegram Bot Management** (`skills/ai-agents/kuroko/`):
   - Declarative bot fleets, commands, bios, and BotFather sync via `kuroko`.
+- **CLI Tool Development** (`skills/build-tooling/cli-builder/`):
+  - Non-interactive commands, stable `--help` and `--json` contracts, idempotent operations, `--dry-run` previews, POSIX exit codes.
+- **Frontend & Web UI Design** (`skills/web-dev/frontend-design/` & `skills/web-dev/web-design-guidelines/`):
+  - Opinionated visual identity, bespoke color/typography tokens, zero generic AI-slop templates, WCAG 2.2 accessibility, responsive layouts.

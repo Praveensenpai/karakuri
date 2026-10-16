@@ -200,7 +200,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn write_to_file (dir : & Path , digest : & CodebaseDigest) -> Result < () >
   ```
 
-### `src/infra/embedded.rs` (Role: infra, Lines: 86)
+### `src/infra/embedded.rs` (Role: infra, Lines: 101)
 - **Responsibility**: Core infra logic in src/infra/embedded.rs
 - **Imports**: use crate :: domain :: Stack 
 - **Types & Enums**:
@@ -246,7 +246,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn extract_digest (path : & Path , content : & str) -> ModuleDigest
   ```
 
-### `src/infra/selector.rs` (Role: infra, Lines: 69)
+### `src/infra/selector.rs` (Role: infra, Lines: 72)
 - **Responsibility**: Core infra logic in src/infra/selector.rs
 - **Imports**: use crate :: domain :: { SkillFilter , StackSet } , use crate :: infra :: embedded :: { SkillAsset , EMBEDDED_SKILLS } 
 - **Public Functions & Signatures**:

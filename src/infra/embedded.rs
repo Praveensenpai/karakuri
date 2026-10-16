@@ -83,4 +83,19 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         stacks: &[Stack::Optional],
         content: include_str!("../../skills/ai-agents/kuroko/SKILL.md"),
     },
+    SkillAsset {
+        name: "cli-builder",
+        stacks: &[Stack::Optional],
+        content: include_str!("../../skills/build-tooling/cli-builder/SKILL.md"),
+    },
+    SkillAsset {
+        name: "frontend-design",
+        stacks: &[Stack::Optional],
+        content: include_str!("../../skills/web-dev/frontend-design/SKILL.md"),
+    },
+    SkillAsset {
+        name: "web-design-guidelines",
+        stacks: &[Stack::Optional],
+        content: include_str!("../../skills/web-dev/web-design-guidelines/SKILL.md"),
+    },
 ];
