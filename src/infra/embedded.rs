@@ -98,4 +98,9 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         stacks: &[Stack::Optional],
         content: include_str!("../../skills/web-dev/web-design-guidelines/SKILL.md"),
     },
+    SkillAsset {
+        name: "tui-design",
+        stacks: &[Stack::Optional],
+        content: include_str!("../../skills/tui-dev/tui-design/SKILL.md"),
+    },
 ];

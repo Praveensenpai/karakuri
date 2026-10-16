@@ -52,6 +52,7 @@ mod tests {
         assert!(!names.contains(&"cli-builder"));
         assert!(!names.contains(&"frontend-design"));
         assert!(!names.contains(&"web-design-guidelines"));
+        assert!(!names.contains(&"tui-design"));
     }
 
     #[test]

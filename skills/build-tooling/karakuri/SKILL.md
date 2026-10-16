@@ -129,7 +129,7 @@ karakuri ensure /path/to/project
 | **Python** | `python-clean-code`, `rust-style-python` |
 | **Mobile** | `compose-clean-code` |
 | **Shell** | `bash-clean-code` |
-| **Optional** (never auto-selected) | `tayori`, `kuroko`, `cli-builder`, `frontend-design`, `web-design-guidelines` |
+| **Optional** (never auto-selected) | `tayori`, `kuroko`, `cli-builder`, `frontend-design`, `web-design-guidelines`, `tui-design` |
 
 Generic guardrails are always included. Python projects receive both `python-clean-code` and `rust-style-python`.
 

@@ -198,7 +198,7 @@ Generic guardrails are always included. Python projects receive both `python-cle
 
 ## 📚 Skill Catalog
 
-Karakuri embeds 14 modular, battle-tested skills for AI coding agents:
+Karakuri embeds 18 modular, battle-tested skills for AI coding agents:
 
 | Skill | Category | Description | Path |
 | :--- | :--- | :--- | :--- |
@@ -218,6 +218,7 @@ Karakuri embeds 14 modular, battle-tested skills for AI coding agents:
 | **`cli-builder`** | `build-tooling` | Builds robust agent- and human-facing CLI tools with predictable subcommand hierarchy, stable `--help` and `--json` contracts, idempotent operations, and `--dry-run` previews. | [`skills/build-tooling/cli-builder/SKILL.md`](skills/build-tooling/cli-builder/SKILL.md) |
 | **`frontend-design`** | `web-dev` | Enforces distinctive, intentional visual design for Web UI: eliminates AI-slop templates, establishes bespoke color/type token systems, and designs memorable user experiences. | [`skills/web-dev/frontend-design/SKILL.md`](skills/web-dev/frontend-design/SKILL.md) |
 | **`web-design-guidelines`** | `web-dev` | Audits and reviews UI code against Web Interface Guidelines, accessibility (WCAG), keyboard navigation, focus states, and UX best practices. | [`skills/web-dev/web-design-guidelines/SKILL.md`](skills/web-dev/web-design-guidelines/SKILL.md) |
+| **`tui-design`** | `tui-dev` | Guides the design, layout, keyboard navigation, and architecture of interactive Terminal User Interfaces across Ratatui, Bubble Tea, Textual, and Ink. | [`skills/tui-dev/tui-design/SKILL.md`](skills/tui-dev/tui-design/SKILL.md) |
 | **`unslop`** | `writing` | Strips AI tells from written output: removes AI buzzwords (delve, pivotal, tapestry, etc.), em-dash overuse, sycophantic phrasing, and filler. Keeps communication direct and human. | [`skills/writing/unslop/SKILL.md`](skills/writing/unslop/SKILL.md) |
 
 ---

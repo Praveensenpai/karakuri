@@ -83,3 +83,5 @@ Before writing, modifying, or refactoring code in any specific language or frame
   - Non-interactive commands, stable `--help` and `--json` contracts, idempotent operations, `--dry-run` previews, POSIX exit codes.
 - **Frontend & Web UI Design** (`skills/web-dev/frontend-design/` & `skills/web-dev/web-design-guidelines/`):
   - Opinionated visual identity, bespoke color/typography tokens, zero generic AI-slop templates, WCAG 2.2 accessibility, responsive layouts.
+- **Terminal User Interface (TUI) Design** (`skills/tui-dev/tui-design/`):
+  - Framework idiomatic patterns (Ratatui, Bubble Tea, Textual, Ink), monochrome-first palettes (max 3-4 accents), grid alignment, alternate screen recovery, double-width Unicode/CJK width calculation.
