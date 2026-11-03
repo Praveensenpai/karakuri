@@ -103,4 +103,9 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         stacks: &[Stack::Optional],
         content: include_str!("../../skills/tui-dev/tui-design/SKILL.md"),
     },
+    SkillAsset {
+        name: "xerj",
+        stacks: &[Stack::Optional],
+        content: include_str!("../../skills/ai-agents/xerj/SKILL.md"),
+    },
 ];

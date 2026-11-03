@@ -198,7 +198,7 @@ Generic guardrails are always included. Python projects receive both `python-cle
 
 ## 📚 Skill Catalog
 
-Karakuri embeds 18 modular, battle-tested skills for AI coding agents:
+Karakuri embeds 19 modular, battle-tested skills for AI coding agents:
 
 | Skill | Category | Description | Path |
 | :--- | :--- | :--- | :--- |
@@ -213,12 +213,14 @@ Karakuri embeds 18 modular, battle-tested skills for AI coding agents:
 | **`codebase-digest`** | `build-tooling` | Generates and maintains a high-density, AI-first `CODEBASE.md` index. Gives LLMs full architecture and symbol comprehension in a single file without burning tool calls. | [`skills/build-tooling/codebase-digest/SKILL.md`](skills/build-tooling/codebase-digest/SKILL.md) |
 | **`systematic-code-verification`** | `build-tooling` | Eliminates the "fire-and-forget" assumption antipattern. Mandates a zero-assumption policy, a 3-phase verification cycle, and mandatory terminal proof presentation. | [`skills/build-tooling/systematic-code-verification/SKILL.md`](skills/build-tooling/systematic-code-verification/SKILL.md) |
 | **`tayori`** | `ai-agents` | Integrates AI coding assistants with Telegram notifications via the `tayori` CLI: interactive approval requests (`tayori ask -i`), completion alerts (`tayori done`), and critical errors (`tayori alert`). | [`skills/ai-agents/tayori/SKILL.md`](skills/ai-agents/tayori/SKILL.md) |
+| **`kuroko`** | `ai-agents` | Manages and reconciles Telegram bot fleets declaratively: register bot commands, configure metadata and avatars, inspect fleet state, and deploy changes via HTTP/MTProto. | [`skills/ai-agents/kuroko/SKILL.md`](skills/ai-agents/kuroko/SKILL.md) |
+| **`xerj`** | `ai-agents` | Local-first AI search engine, AST-aware code indexer, and MCP server: Tree-sitter symbol lookups (`xerj def`), BM25/vector/hybrid code search, and durable agent memory. | [`skills/ai-agents/xerj/SKILL.md`](skills/ai-agents/xerj/SKILL.md) |
 | **`compose-clean-code`** | `mobile-dev` | Enforces architecture, performance, and Material 3 theming for Jetpack Compose: strict limits, two-layer `XRoute`/`XScreen` separation, immutable collections, and zero emojis. | [`skills/mobile-dev/compose-clean-code/SKILL.md`](skills/mobile-dev/compose-clean-code/SKILL.md) |
-| **`kuroko`** | `ai-agents` | Declarative fleet management for Telegram bots via the `kuroko` CLI: synchronize bot menus, bios, descriptions, and user commands directly with BotFather. | [`skills/ai-agents/kuroko/SKILL.md`](skills/ai-agents/kuroko/SKILL.md) |
 | **`cli-builder`** | `build-tooling` | Builds robust agent- and human-facing CLI tools with predictable subcommand hierarchy, stable `--help` and `--json` contracts, idempotent operations, and `--dry-run` previews. | [`skills/build-tooling/cli-builder/SKILL.md`](skills/build-tooling/cli-builder/SKILL.md) |
 | **`frontend-design`** | `web-dev` | Enforces distinctive, intentional visual design for Web UI: eliminates AI-slop templates, establishes bespoke color/type token systems, and designs memorable user experiences. | [`skills/web-dev/frontend-design/SKILL.md`](skills/web-dev/frontend-design/SKILL.md) |
 | **`web-design-guidelines`** | `web-dev` | Audits and reviews UI code against Web Interface Guidelines, accessibility (WCAG), keyboard navigation, focus states, and UX best practices. | [`skills/web-dev/web-design-guidelines/SKILL.md`](skills/web-dev/web-design-guidelines/SKILL.md) |
 | **`tui-design`** | `tui-dev` | Guides the design, layout, keyboard navigation, and architecture of interactive Terminal User Interfaces across Ratatui, Bubble Tea, Textual, and Ink. | [`skills/tui-dev/tui-design/SKILL.md`](skills/tui-dev/tui-design/SKILL.md) |
+| **`unslop`** | `writing` | Strips AI tells from written output: removes AI buzzwords (delve, pivotal, tapestry, etc.), em-dash overuse, sycophantic phrasing, and filler. Keeps communication direct and human. | [`skills/writing/unslop/SKILL.md`](skills/writing/unslop/SKILL.md) |
 | **`unslop`** | `writing` | Strips AI tells from written output: removes AI buzzwords (delve, pivotal, tapestry, etc.), em-dash overuse, sycophantic phrasing, and filler. Keeps communication direct and human. | [`skills/writing/unslop/SKILL.md`](skills/writing/unslop/SKILL.md) |
 
 ---

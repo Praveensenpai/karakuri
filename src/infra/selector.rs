@@ -53,6 +53,7 @@ mod tests {
         assert!(!names.contains(&"frontend-design"));
         assert!(!names.contains(&"web-design-guidelines"));
         assert!(!names.contains(&"tui-design"));
+        assert!(!names.contains(&"xerj"));
     }
 
     #[test]
