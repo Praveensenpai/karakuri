@@ -54,6 +54,11 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         content: include_str!("../../skills/build-tooling/rust-clean-code/SKILL.md"),
     },
     SkillAsset {
+        name: "rbuild",
+        stacks: &[Stack::Rust],
+        content: include_str!("../../skills/build-tooling/rbuild/SKILL.md"),
+    },
+    SkillAsset {
         name: "python-clean-code",
         stacks: &[Stack::Python],
         content: include_str!("../../skills/build-tooling/python-clean-code/SKILL.md"),
