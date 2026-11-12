@@ -200,7 +200,7 @@ Entrypoint ──> CLI/Parser ──> Domain Logic ──> Infra/IO
   fn write_to_file (dir : & Path , digest : & CodebaseDigest) -> Result < () >
   ```
 
-### `src/infra/embedded.rs` (Role: infra, Lines: 116)
+### `src/infra/embedded.rs` (Role: infra, Lines: 121)
 - **Responsibility**: Core infra logic in src/infra/embedded.rs
 - **Imports**: use crate :: domain :: Stack 
 - **Types & Enums**:

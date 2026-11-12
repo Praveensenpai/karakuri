@@ -5,7 +5,7 @@
 [![Latest Release](https://img.shields.io/github/v/release/Praveensenpai/karakuri?style=for-the-badge&color=89b4fa)](https://github.com/Praveensenpai/karakuri/releases)
 [![Rust Edition](https://img.shields.io/badge/Rust-2021%20Edition-DEA584?style=for-the-badge&logo=rust)](Cargo.toml)
 [![Platform](https://img.shields.io/badge/Platform-Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)](https://github.com/Praveensenpai/karakuri)
-[![Skills Count](https://img.shields.io/badge/Skills-14%20Modular-cba6f7?style=for-the-badge)](skills/)
+[![Skills Count](https://img.shields.io/badge/Skills-21%20Modular-cba6f7?style=for-the-badge)](skills/)
 [![License](https://img.shields.io/badge/License-MIT%20%2F%20Apache--2.0-a6e3a1?style=for-the-badge)](LICENSE)
 
 <br>
@@ -198,7 +198,7 @@ Generic guardrails are always included. Python projects receive both `python-cle
 
 ## 📚 Skill Catalog
 
-Karakuri embeds 19 modular, battle-tested skills for AI coding agents:
+Karakuri embeds 21 modular, battle-tested skills for AI coding agents:
 
 | Skill | Category | Description | Path |
 | :--- | :--- | :--- | :--- |
@@ -216,11 +216,11 @@ Karakuri embeds 19 modular, battle-tested skills for AI coding agents:
 | **`kuroko`** | `ai-agents` | Manages and reconciles Telegram bot fleets declaratively: register bot commands, configure metadata and avatars, inspect fleet state, and deploy changes via HTTP/MTProto. | [`skills/ai-agents/kuroko/SKILL.md`](skills/ai-agents/kuroko/SKILL.md) |
 | **`xerj`** | `ai-agents` | Local-first AI search engine, AST-aware code indexer, and MCP server: Tree-sitter symbol lookups (`xerj def`), BM25/vector/hybrid code search, and durable agent memory. | [`skills/ai-agents/xerj/SKILL.md`](skills/ai-agents/xerj/SKILL.md) |
 | **`compose-clean-code`** | `mobile-dev` | Enforces architecture, performance, and Material 3 theming for Jetpack Compose: strict limits, two-layer `XRoute`/`XScreen` separation, immutable collections, and zero emojis. | [`skills/mobile-dev/compose-clean-code/SKILL.md`](skills/mobile-dev/compose-clean-code/SKILL.md) |
+| **`android-app-testing`** | `mobile-dev` | Acts as a senior Android QA contractor: builds from source, enumerates every screen, element, flow, manifest component, and function, verifies functional, visual, UX, accessibility, performance, and security behavior on a USB phone plus emulator, and repairs defects in a bounded loop with timestamped evidence. | [`skills/mobile-dev/android-app-testing/SKILL.md`](skills/mobile-dev/android-app-testing/SKILL.md) |
 | **`cli-builder`** | `build-tooling` | Builds robust agent- and human-facing CLI tools with predictable subcommand hierarchy, stable `--help` and `--json` contracts, idempotent operations, and `--dry-run` previews. | [`skills/build-tooling/cli-builder/SKILL.md`](skills/build-tooling/cli-builder/SKILL.md) |
 | **`frontend-design`** | `web-dev` | Enforces distinctive, intentional visual design for Web UI: eliminates AI-slop templates, establishes bespoke color/type token systems, and designs memorable user experiences. | [`skills/web-dev/frontend-design/SKILL.md`](skills/web-dev/frontend-design/SKILL.md) |
 | **`web-design-guidelines`** | `web-dev` | Audits and reviews UI code against Web Interface Guidelines, accessibility (WCAG), keyboard navigation, focus states, and UX best practices. | [`skills/web-dev/web-design-guidelines/SKILL.md`](skills/web-dev/web-design-guidelines/SKILL.md) |
 | **`tui-design`** | `tui-dev` | Guides the design, layout, keyboard navigation, and architecture of interactive Terminal User Interfaces across Ratatui, Bubble Tea, Textual, and Ink. | [`skills/tui-dev/tui-design/SKILL.md`](skills/tui-dev/tui-design/SKILL.md) |
-| **`unslop`** | `writing` | Strips AI tells from written output: removes AI buzzwords (delve, pivotal, tapestry, etc.), em-dash overuse, sycophantic phrasing, and filler. Keeps communication direct and human. | [`skills/writing/unslop/SKILL.md`](skills/writing/unslop/SKILL.md) |
 | **`unslop`** | `writing` | Strips AI tells from written output: removes AI buzzwords (delve, pivotal, tapestry, etc.), em-dash overuse, sycophantic phrasing, and filler. Keeps communication direct and human. | [`skills/writing/unslop/SKILL.md`](skills/writing/unslop/SKILL.md) |
 
 ---

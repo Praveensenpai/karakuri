@@ -74,6 +74,11 @@ pub const EMBEDDED_SKILLS: &[SkillAsset] = &[
         content: include_str!("../../skills/mobile-dev/compose-clean-code/SKILL.md"),
     },
     SkillAsset {
+        name: "android-app-testing",
+        stacks: &[Stack::Mobile],
+        content: include_str!("../../skills/mobile-dev/android-app-testing/SKILL.md"),
+    },
+    SkillAsset {
         name: "bash-clean-code",
         stacks: &[Stack::Shell],
         content: include_str!("../../skills/system-ops/bash-clean-code/SKILL.md"),
