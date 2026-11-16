@@ -10,6 +10,10 @@ use replace::replace_binary;
 pub struct Updater;
 
 impl Updater {
+    pub fn latest_tag() -> Result<String> {
+        asset::latest_tag()
+    }
+
     pub fn run(opts: &UpdateOptions) -> Result<UpdateOutcome> {
         let current = env!("CARGO_PKG_VERSION").to_string();
         let tag = asset::latest_tag()?;

@@ -153,7 +153,75 @@ fn handle_update(args: UpdateArgs) -> Result<()> {
     Ok(())
 }
 
+fn maybe_daily_update_check() {
+    // Only run once per calendar day.
+    let today = today_stamp();
+    if today.is_empty() {
+        return;
+    }
+    let marker = match dirs::home_dir() {
+        Some(h) => h.join(".karakuri").join("last_update_check"),
+        None => return,
+    };
+    if let Ok(last) = std::fs::read_to_string(&marker) {
+        if last.trim() == today {
+            return;
+        }
+    }
+
+    let current = env!("CARGO_PKG_VERSION").to_string();
+    let tag = match infra::Updater::latest_tag() {
+        Ok(t) => t,
+        Err(_) => return, // network failure: retry next run
+    };
+    let latest = tag.trim_start_matches('v').to_string();
+    if latest == current {
+        let _ = write_marker(&marker, &today);
+        return;
+    }
+
+    println!(
+        "  \u{25c7}  {} {} \u{2192} {}",
+        "New Karakuri version available:".bold(),
+        current.bright_cyan(),
+        latest.bright_cyan().bold()
+    );
+    println!("  \u{2502}  Updating automatically...");
+
+    let opts = domain::UpdateOptions {
+        check_only: false,
+        force: false,
+    };
+    match infra::Updater::run(&opts) {
+        Ok(outcome) => {
+            tui::print_update_report(&outcome);
+        }
+        Err(err) => {
+            println!("  {}  {}", "Update failed:".bright_red().bold(), err);
+        }
+    }
+    let _ = write_marker(&marker, &today);
+}
+
+fn write_marker(path: &std::path::Path, today: &str) -> std::io::Result<()> {
+    if let Some(parent) = path.parent() {
+        let _ = std::fs::create_dir_all(parent);
+    }
+    std::fs::write(path, today)
+}
+
+fn today_stamp() -> String {
+    std::process::Command::new("date")
+        .arg("+%Y-%m-%d")
+        .output()
+        .ok()
+        .and_then(|o| String::from_utf8(o.stdout).ok())
+        .map(|s| s.trim().to_string())
+        .unwrap_or_default()
+}
+
 fn main() {
+    maybe_daily_update_check();
     if let Err(err) = run() {
         eprintln!("  {}  {}", "Error:".bright_red().bold(), err);
         exit(1);
